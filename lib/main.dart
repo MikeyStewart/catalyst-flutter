@@ -1,22 +1,23 @@
-import 'package:animations/animations.dart';
-import 'package:catalyst_flutter/categorylist.dart';
-import 'package:catalyst_flutter/eventslist.dart';
-import 'package:catalyst_flutter/map.dart';
-import 'package:catalyst_flutter/themecamplist.dart';
+import 'dart:convert';
+
+import 'package:catalyst_flutter/screens/categorylist.dart';
+import 'package:catalyst_flutter/screens/eventslist.dart';
+import 'package:catalyst_flutter/screens/guidingprinciples.dart';
+import 'package:catalyst_flutter/screens/map.dart';
+import 'package:catalyst_flutter/screens/themecamps.dart';
 import 'package:flutter/material.dart';
+import 'data/event.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const CatalystApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class CatalystApp extends StatelessWidget {
+  const CatalystApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.orange),
         cardTheme: CardTheme(
@@ -24,20 +25,46 @@ class MyApp extends StatelessWidget {
                 borderRadius: BorderRadius.all(Radius.circular(16)))),
         useMaterial3: true,
       ),
-      home: const MyHomePage(),
+      home: LoadAssets(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
-
+class LoadAssets extends StatelessWidget {
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  Widget build(BuildContext context) {
+    return FutureBuilder<String>(
+        future: loadEvents(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (snapshot.hasError || snapshot.data == null) {
+            return Text("Error: ${snapshot.error}");
+          } else {
+            final List<dynamic> eventListJson = jsonDecode(snapshot.data!);
+            final List<Event> events =
+                eventListJson.map((json) => Event.fromJson(json)).toList();
+
+            return NavigationContainer(events: events);
+          }
+        });
+  }
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  static final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+class NavigationContainer extends StatefulWidget {
+  final List<Event> events;
+
+  NavigationContainer({required this.events});
+
+  @override
+  State<NavigationContainer> createState() => _NavigationContainerState();
+}
+
+class _NavigationContainerState extends State<NavigationContainer> {
+  static final GlobalKey<ScaffoldState> scaffoldKey =
+      GlobalKey<ScaffoldState>();
 
   int selectedPageIndex = 0;
 
@@ -49,16 +76,18 @@ class _MyHomePageState extends State<MyHomePage> {
     scaffoldKey.currentState!.closeDrawer();
   }
 
-  List<Widget> screens = <Widget>[
-    EventsList(openDrawer),
-    EventsList(openDrawer),
-    EventsList(openDrawer),
-    ThemeCampsList(openDrawer),
-    CategoryList(openDrawer),
-  ];
-
   @override
   Widget build(BuildContext context) {
+    List<Widget> screens = <Widget>[
+      EventsList(openDrawer, widget.events),
+      EventsList(openDrawer, widget.events),
+      EventsList(openDrawer, widget.events),
+      ThemeCamps(openDrawer),
+      CategoryList(openDrawer),
+      Map(openDrawer),
+      GuidingPrinciples(openDrawer),
+    ];
+
     return Scaffold(
         key: scaffoldKey,
         drawer: NavigationDrawer(
@@ -70,11 +99,29 @@ class _MyHomePageState extends State<MyHomePage> {
           },
           selectedIndex: selectedPageIndex,
           children: [
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(28, 16, 16, 0),
+                child: Image(
+                  width: 64,
+                  height: 64,
+                  image: AssetImage('assets/catalyst_logo.png'),
+                ),
+              ),
+            ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(28, 16, 16, 32),
+              padding: const EdgeInsets.fromLTRB(28, 16, 16, 16),
               child: Text(
-                'Catalyst: Kiwiburn Guide',
-                style: Theme.of(context).textTheme.titleSmall,
+                'Catalyst: \nKiwiburn Guide',
+                style: Theme.of(context).textTheme.headlineMedium,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(28, 0, 16, 32),
+              child: Text(
+                'What will spark your fire?',
+                style: Theme.of(context).textTheme.bodyMedium,
               ),
             ),
             NavigationDrawerDestination(
@@ -91,38 +138,16 @@ class _MyHomePageState extends State<MyHomePage> {
                 icon: Icon(Icons.festival_outlined),
                 label: Text('Theme camps')),
             NavigationDrawerDestination(
-                icon: Icon(Icons.category),
-                label: Text('Categories'),
+              icon: Icon(Icons.category),
+              label: Text('Categories'),
             ),
-            const Padding(
-              padding: EdgeInsets.fromLTRB(28, 16, 28, 10),
-              child: Divider(),
+            NavigationDrawerDestination(
+              icon: Icon(Icons.map_outlined),
+              label: Text('Map'),
             ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(28, 16, 16, 16),
-              child: Text(
-                'Map',
-                style: Theme.of(context).textTheme.titleSmall,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24.0),
-              child: OpenContainer(
-                transitionType: ContainerTransitionType.fadeThrough,
-                closedColor: Theme.of(context).cardColor,
-                closedElevation: 0.0,
-                openElevation: 4.0,
-                transitionDuration: Duration(milliseconds: 300),
-                openBuilder: (BuildContext context, VoidCallback _) => Map(),
-                closedBuilder: (BuildContext _, VoidCallback openContainer) {
-                  return ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
-                    child: Image(
-                      image: AssetImage('assets/KB-Map-23.jpg'),
-                    ),
-                  );
-                },
-              ),
+            NavigationDrawerDestination(
+              icon: Icon(Icons.accessibility_new),
+              label: Text('Guiding principles'),
             ),
           ],
         ),
