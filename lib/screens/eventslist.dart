@@ -12,10 +12,9 @@ Future<String> loadEvents() async {
 }
 
 class EventsList extends StatelessWidget {
-  Function() _openDrawer;
   List<Event> events;
 
-  EventsList(this._openDrawer, this.events);
+  EventsList(this.events);
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +43,7 @@ class EventsList extends StatelessWidget {
                 ),
             ]),
             leading: IconButton(
-              onPressed: _openDrawer,
+              onPressed: () {},
               icon: Icon(Icons.menu),
             ),
           ),

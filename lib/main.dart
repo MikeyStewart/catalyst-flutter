@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:catalyst_flutter/screens/homepage.dart';
 import 'package:catalyst_flutter/screens/categorylist.dart';
 import 'package:catalyst_flutter/screens/eventslist.dart';
 import 'package:catalyst_flutter/screens/guidingprinciples.dart';
@@ -79,9 +80,9 @@ class _NavigationContainerState extends State<NavigationContainer> {
   @override
   Widget build(BuildContext context) {
     List<Widget> screens = <Widget>[
-      EventsList(openDrawer, widget.events),
-      EventsList(openDrawer, widget.events),
-      EventsList(openDrawer, widget.events),
+      EventsList(widget.events),
+      EventsList(widget.events),
+      EventsList(widget.events),
       ThemeCamps(openDrawer),
       CategoryList(openDrawer),
       Map(openDrawer),
@@ -151,7 +152,7 @@ class _NavigationContainerState extends State<NavigationContainer> {
             ),
           ],
         ),
-        body: screens[selectedPageIndex]);
+        body: HomePage(events: widget.events,));
   }
 }
 
