@@ -92,7 +92,8 @@ class CountDownItem extends StatelessWidget {
         children: [
           Text(value,
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 40)),
-          Text(label),
+          Text(label,
+              style: TextStyle(fontWeight: FontWeight.normal, fontSize: 14)),
         ],
       ),
     );

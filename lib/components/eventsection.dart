@@ -9,10 +9,6 @@ import 'package:flutter/rendering.dart';
 import '../data/event.dart';
 
 class EventSection extends StatelessWidget {
-  final List<Event> events;
-
-  EventSection({required this.events});
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -26,13 +22,13 @@ class EventSection extends StatelessWidget {
               Expanded(
                 child: AspectRatio(
                   aspectRatio: 2 / 1,
-                  child: CategoryCard(category: 'All events', events: events),
+                  child: CategoryCard(category: 'All events'),
                 ),
               ),
               Expanded(
                 child: AspectRatio(
                   aspectRatio: 2 / 1,
-                  child: CategoryCard(category: 'Saved events', events: events),
+                  child: CategoryCard(category: 'Saved events'),
                 ),
               ),
             ],
@@ -44,10 +40,9 @@ class EventSection extends StatelessWidget {
 }
 
 class CategoryCard extends StatelessWidget {
-  final List<Event> events;
   final String category;
 
-  CategoryCard({required this.category, required this.events});
+  CategoryCard({required this.category});
 
   @override
   Widget build(BuildContext context) {
