@@ -10,96 +10,93 @@ class EventCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-        elevation: 0,
-        color: Theme.of(context).colorScheme.surfaceVariant.withAlpha(100),
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  Row(
                     children: [
-                      Row(
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.only(bottom: 4),
-                            child: Icon(Icons.location_pin),
-                          ),
-                          Text(
-                            event.location,
-                            style: Theme.of(context)
-                                .textTheme
-                                .labelLarge!
-                                .apply(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onSurfaceVariant),
-                          ),
-                        ],
+                      Padding(
+                        padding: EdgeInsets.only(bottom: 4),
+                        child: Icon(Icons.location_pin),
                       ),
-                      Row(
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.fromLTRB(0, 0, 4, 0),
-                            child: Icon(Icons.access_time),
-                          ),
-                          Text(
-                            event.prettyTime,
-                            style: Theme.of(context)
-                                .textTheme
-                                .labelLarge!
-                                .apply(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onSurfaceVariant),
-                          ),
-                        ],
+                      Text(
+                        event.location,
+                        style: Theme.of(context)
+                            .textTheme
+                            .labelLarge!
+                            .apply(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onSurfaceVariant),
                       ),
                     ],
                   ),
-                  IconButton(
-                    onPressed: () {},
-                    icon: Icon(Icons.favorite_outline),
+                  Row(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(0, 0, 4, 0),
+                        child: Icon(Icons.access_time),
+                      ),
+                      Text(
+                        event.prettyTime,
+                        style: Theme.of(context)
+                            .textTheme
+                            .labelLarge!
+                            .apply(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onSurfaceVariant),
+                      ),
+                    ],
                   ),
                 ],
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: Text(
-                  event.name,
-                  style: Theme.of(context).textTheme.titleMedium!.apply(
-                      color: Theme.of(context).colorScheme.onSurfaceVariant),
-                ),
-              ),
-              Text(
-                event.description,
-                maxLines: 3,
-                overflow: TextOverflow.ellipsis,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 8.0),
-                child: Wrap(
-                  spacing: 8,
-                  children: [
-                    for (Category category in event.categories)
-                      Chip(label: Text(category.displayName)),
-                    if (event.adultWarnings.isNotEmpty)
-                      Chip(
-                        label: Text('R18'),
-                        backgroundColor:
-                            Theme.of(context).colorScheme.errorContainer,
-                      )
-                  ],
-                ),
+              IconButton(
+                onPressed: () {},
+                icon: Icon(Icons.favorite_outline),
               ),
             ],
           ),
-        ));
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0),
+            child: Text(
+              event.name,
+              style: Theme.of(context).textTheme.titleMedium!.apply(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant),
+            ),
+          ),
+          Text(
+            event.description,
+            maxLines: 3,
+            overflow: TextOverflow.ellipsis,
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 8.0),
+            child: Wrap(
+              spacing: 8,
+              children: [
+                for (Category category in event.categories)
+                  Chip(label: Text(category.displayName)),
+                if (event.adultWarnings.isNotEmpty)
+                  Chip(
+                    label: Text('R18'),
+                    backgroundColor:
+                        Theme.of(context).colorScheme.errorContainer,
+                  )
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

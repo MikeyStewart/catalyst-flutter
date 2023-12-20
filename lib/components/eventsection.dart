@@ -1,6 +1,6 @@
 import 'package:animations/animations.dart';
 import 'package:catalyst_flutter/components/carousel.dart';
-import 'package:catalyst_flutter/screens/eventslist.dart';
+import 'package:catalyst_flutter/screens/eventspage.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui';
 

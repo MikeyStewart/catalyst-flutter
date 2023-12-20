@@ -49,7 +49,13 @@ class EventsPage extends StatelessWidget {
             for (DateTime date in dates)
               ListView.separated(
                 separatorBuilder: (BuildContext context, int index) {
-                  return SizedBox(height: 16);
+                  return Column(
+                    children: [
+                      SizedBox(height: 8.0),
+                      Divider(),
+                      SizedBox(height: 8.0),
+                    ],
+                  );
                 },
                 padding: const EdgeInsets.all(16),
                 itemCount:
@@ -58,19 +64,7 @@ class EventsPage extends StatelessWidget {
                   Event event = events
                       .where((event) => event.dates.contains(date))
                       .toList()[index];
-                  return OpenContainer(
-                    transitionType: ContainerTransitionType.fadeThrough,
-                    closedColor: Theme.of(context).cardColor,
-                    closedElevation: 0.0,
-                    openElevation: 4.0,
-                    transitionDuration: Duration(milliseconds: 500),
-                    openBuilder: (BuildContext context, VoidCallback _) =>
-                        EventScreen(event),
-                    closedBuilder:
-                        (BuildContext _, VoidCallback openContainer) {
-                      return EventCard(event);
-                    },
-                  );
+                  return EventCard(event);
                 },
               ),
           ]),

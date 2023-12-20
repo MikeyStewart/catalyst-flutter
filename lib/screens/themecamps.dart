@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:catalyst_flutter/data/themecamp.dart';
-import 'package:catalyst_flutter/screens/eventslist.dart';
+import 'package:catalyst_flutter/screens/eventspage.dart';
 import 'dart:convert';
 import 'package:animations/animations.dart';
 
