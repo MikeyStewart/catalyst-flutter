@@ -1,23 +1,19 @@
+import 'package:animations/animations.dart';
+import 'package:catalyst_flutter/components/eventcard.dart';
+import 'package:catalyst_flutter/data/event.dart';
 import 'package:catalyst_flutter/screens/eventscreen.dart';
 import 'package:flutter/material.dart';
-import 'dart:convert';
-import 'package:catalyst_flutter/data/event.dart';
-import 'package:catalyst_flutter/components/eventcard.dart';
 import 'package:intl/intl.dart';
-import 'package:flutter/services.dart' show rootBundle;
-import 'package:animations/animations.dart';
+import 'package:provider/provider.dart';
 
-Future<String> loadEvents() async {
-  return await rootBundle.loadString('assets/events.json');
-}
+import '../main.dart';
 
-class EventsList extends StatelessWidget {
-  List<Event> events;
-
-  EventsList(this.events);
-
+class EventsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    var appState = context.watch<MyAppState>();
+
+    List<Event> events = appState.events;
     List<DateTime> dates = [];
     DateFormat prettyDateFormat = DateFormat('E dd MMM');
 
@@ -35,7 +31,7 @@ class EventsList extends StatelessWidget {
         child: Scaffold(
           appBar: AppBar(
             centerTitle: true,
-            title: Text('All events'),
+            title: Text('Events'),
             bottom: TabBar(isScrollable: true, tabs: <Widget>[
               for (DateTime date in dates)
                 Tab(
@@ -43,8 +39,10 @@ class EventsList extends StatelessWidget {
                 ),
             ]),
             leading: IconButton(
-              onPressed: () {},
-              icon: Icon(Icons.menu),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              icon: Icon(Icons.arrow_back),
             ),
           ),
           body: TabBarView(children: <Widget>[
