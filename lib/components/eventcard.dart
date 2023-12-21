@@ -66,7 +66,11 @@ class EventCard extends StatelessWidget {
                       fontStyle: FontStyle.italic,
                     ),
                   ),
-                  if (event.adultWarnings.isNotEmpty) Text('R18')
+                  if (event.adultWarnings.isNotEmpty)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8.0),
+                      child: Text('R18'),
+                    )
                 ],
               ),
             ),

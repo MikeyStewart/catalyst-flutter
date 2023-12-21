@@ -79,14 +79,13 @@ extension EventExtension on Event {
     String end = '';
     if (startTime != null) {
       start = timeFormat.format(startTime!);
-      start = start.replaceAll(' ', '\n');
     }
     // if (endTime != null) {
     //   start += ' - ';
     //   end = timeFormat.format(endTime!);
     // }
     if (startTime == null && endTime == null) {
-      start = 'All\nday';
+      start = 'All day';
     }
 
     return start;
