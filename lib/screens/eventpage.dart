@@ -1,6 +1,7 @@
 import 'package:catalyst_flutter/data/category.dart';
 import 'package:catalyst_flutter/data/event.dart';
 import 'package:flutter/material.dart';
+import 'package:share_plus/share_plus.dart';
 
 class EventPage extends StatelessWidget {
   EventPage(this.event);
@@ -51,7 +52,9 @@ class EventPage extends StatelessWidget {
                     FractionallySizedBox(
                       widthFactor: 0.8,
                       child: FilledButton.tonalIcon(
-                        onPressed: () {},
+                        onPressed: () {
+                          Share.share(event.shareMessage);
+                        },
                         label: Text('Share'),
                         icon: Icon(Icons.share),
                       ),

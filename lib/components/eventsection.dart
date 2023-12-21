@@ -1,6 +1,6 @@
 import 'package:animations/animations.dart';
 import 'package:catalyst_flutter/components/carousel.dart';
-import 'package:catalyst_flutter/screens/eventspage.dart';
+import 'package:catalyst_flutter/screens/eventlistpage.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui';
 
@@ -50,7 +50,7 @@ class CategoryCard extends StatelessWidget {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => EventsPage()),
+          MaterialPageRoute(builder: (context) => EventListPage()),
         );
       },
       child: Card(

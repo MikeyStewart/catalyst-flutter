@@ -35,7 +35,8 @@ class Event {
             .toList(),
         startTime = _parseTime(json['Start Time']),
         endTime = _parseTime(json['End Time']),
-        location = _getLocation(json['Location - Theme Camp'], json['Location - Artwork'], json['Location - Other']);
+        location = _getLocation(json['Location - Theme Camp'],
+            json['Location - Artwork'], json['Location - Other']);
 
   Map<String, dynamic> toJson() => {
         'Event Name': name,
@@ -89,5 +90,18 @@ extension EventExtension on Event {
     }
 
     return start;
+  }
+
+  String get shareMessage {
+    DateFormat prettyDateFormat = DateFormat('E dd MMM');
+    return 'Check out this event!\n\n' +
+        name +
+        '\n\n' +
+        'It\'s happening at ' +
+        location +
+        ' at ' +
+        prettyTime +
+        ' on ' +
+        prettyDateFormat.format(dates.first);
   }
 }
