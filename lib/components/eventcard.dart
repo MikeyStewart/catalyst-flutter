@@ -10,93 +10,160 @@ class EventCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Expanded(
+          flex: 1,
+          child: Column(
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(bottom: 4),
-                        child: Icon(Icons.location_pin),
-                      ),
-                      Text(
-                        event.location,
-                        style: Theme.of(context)
-                            .textTheme
-                            .labelLarge!
-                            .apply(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onSurfaceVariant),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(0, 0, 4, 0),
-                        child: Icon(Icons.access_time),
-                      ),
-                      Text(
-                        event.prettyTime,
-                        style: Theme.of(context)
-                            .textTheme
-                            .labelLarge!
-                            .apply(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onSurfaceVariant),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              IconButton(
-                onPressed: () {},
-                icon: Icon(Icons.favorite_outline),
+              Text(
+                event.prettyTime,
+                style: Theme.of(context).textTheme.labelLarge!.apply(
+                    color: Theme.of(context).colorScheme.onSurfaceVariant),
+                textAlign: TextAlign.center,
               ),
             ],
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0),
-            child: Text(
-              event.name,
-              style: Theme.of(context).textTheme.titleMedium!.apply(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant),
-            ),
-          ),
-          Text(
-            event.description,
-            maxLines: 3,
-            overflow: TextOverflow.ellipsis,
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 8.0),
-            child: Wrap(
-              spacing: 8,
+        ),
+        Expanded(
+          flex: 8,
+          child: Padding(
+            padding: const EdgeInsets.only(left: 8.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                for (Category category in event.categories)
-                  Chip(label: Text(category.displayName)),
-                if (event.adultWarnings.isNotEmpty)
-                  Chip(
-                    label: Text('R18'),
-                    backgroundColor:
-                        Theme.of(context).colorScheme.errorContainer,
-                  )
+                Text(
+                  event.name,
+                  style: Theme.of(context).textTheme.titleMedium!.apply(
+                      color: Theme.of(context).colorScheme.onSurfaceVariant),
+                ),
+                SizedBox(height: 8.0),
+                Text(
+                  'at ' + event.location,
+                  style: Theme.of(context).textTheme.labelLarge!.apply(
+                      color: Theme.of(context).colorScheme.onSurfaceVariant),
+                ),
+                SizedBox(height: 8.0),
+                Text(
+                  event.description,
+                  maxLines: 5,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                SizedBox(height: 8.0),
+                Text(
+                  event.categories.map((e) => e.displayName).join(', '),
+                  style: TextStyle(
+                    fontStyle: FontStyle.italic,
+                  ),
+                ),
+                if (event.adultWarnings.isNotEmpty) Text('R18')
               ],
             ),
           ),
-        ],
-      ),
+        ),
+        // Column(
+        //   crossAxisAlignment: CrossAxisAlignment.start,
+        //   mainAxisSize: MainAxisSize.min,
+        //   children: [
+        //     Padding(
+        //       padding: const EdgeInsets.symmetric(vertical: 8.0),
+        //       child: Text(
+        //         event.name,
+        //         style: Theme.of(context).textTheme.titleMedium!.apply(
+        //             color: Theme.of(context).colorScheme.onSurfaceVariant),
+        //       ),
+        //     ),
+        //     Text(
+        //       event.location,
+        //       style: Theme.of(context).textTheme.labelLarge!.apply(
+        //           color: Theme.of(context).colorScheme.onSurfaceVariant),
+        //     ),
+        //     Text(
+        //       event.description,
+        //       maxLines: 3,
+        //       overflow: TextOverflow.ellipsis,
+        //     ),
+        //     Padding(
+        //       padding: const EdgeInsets.only(top: 8.0),
+        //       child: Wrap(
+        //         spacing: 8,
+        //         children: [
+        //           for (Category category in event.categories)
+        //             Chip(label: Text(category.displayName)),
+        //           if (event.adultWarnings.isNotEmpty)
+        //             Chip(
+        //               label: Text('R18'),
+        //               backgroundColor:
+        //                   Theme.of(context).colorScheme.errorContainer,
+        //             )
+        //         ],
+        //       ),
+        //     ),
+        //   ],
+        // ),
+      ],
     );
   }
 }
+
+// class EventCard extends StatelessWidget {
+//   EventCard(this.event);
+//
+//   final Event event;
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Row(
+//       children: [
+//         Text(
+//           event.prettyTime,
+//           style: Theme.of(context)
+//               .textTheme
+//               .labelLarge!
+//               .apply(color: Theme.of(context).colorScheme.onSurfaceVariant),
+//         ),
+//         Column(
+//           crossAxisAlignment: CrossAxisAlignment.start,
+//           mainAxisSize: MainAxisSize.min,
+//           children: [
+//             Padding(
+//               padding: const EdgeInsets.symmetric(vertical: 8.0),
+//               child: Text(
+//                 event.name,
+//                 style: Theme.of(context).textTheme.titleMedium!.apply(
+//                     color: Theme.of(context).colorScheme.onSurfaceVariant),
+//               ),
+//             ),
+//             Text(
+//               event.location,
+//               style: Theme.of(context).textTheme.labelLarge!.apply(
+//                   color: Theme.of(context).colorScheme.onSurfaceVariant),
+//             ),
+//             Text(
+//               event.description,
+//               maxLines: 3,
+//               overflow: TextOverflow.ellipsis,
+//             ),
+//             Padding(
+//               padding: const EdgeInsets.only(top: 8.0),
+//               child: Wrap(
+//                 spacing: 8,
+//                 children: [
+//                   for (Category category in event.categories)
+//                     Chip(label: Text(category.displayName)),
+//                   if (event.adultWarnings.isNotEmpty)
+//                     Chip(
+//                       label: Text('R18'),
+//                       backgroundColor:
+//                       Theme.of(context).colorScheme.errorContainer,
+//                     )
+//                 ],
+//               ),
+//             ),
+//           ],
+//         ),
+//       ],
+//     );
+//   }
+// }

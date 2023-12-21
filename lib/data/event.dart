@@ -73,20 +73,21 @@ String _getLocation(String themeCamp, String artwork, String elsewhere) {
 
 extension EventExtension on Event {
   String get prettyTime {
-    DateFormat timeFormat = DateFormat("HH:mm");
+    DateFormat timeFormat = DateFormat("jm");
     String start = '';
     String end = '';
     if (startTime != null) {
       start = timeFormat.format(startTime!);
+      start = start.replaceAll(' ', '\n');
     }
-    if (endTime != null) {
-      start += ' - ';
-      end = timeFormat.format(endTime!);
-    }
+    // if (endTime != null) {
+    //   start += ' - ';
+    //   end = timeFormat.format(endTime!);
+    // }
     if (startTime == null && endTime == null) {
-      start = 'All day';
+      start = 'All\nday';
     }
 
-    return start + end;
+    return start;
   }
 }
