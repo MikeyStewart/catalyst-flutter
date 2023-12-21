@@ -1,7 +1,7 @@
 import 'package:animations/animations.dart';
 import 'package:catalyst_flutter/components/eventcard.dart';
 import 'package:catalyst_flutter/data/event.dart';
-import 'package:catalyst_flutter/screens/eventscreen.dart';
+import 'package:catalyst_flutter/screens/eventpage.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
