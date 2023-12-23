@@ -1,9 +1,8 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:catalyst_flutter/components/map.dart';
+import 'package:catalyst_flutter/screens/SplashPage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart' show rootBundle;
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -28,7 +27,7 @@ class MyApp extends StatelessWidget {
           useMaterial3: true,
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange),
         ),
-        home: MyHomePage(),
+        home: SplashPage(),
       ),
     );
   }
@@ -61,20 +60,8 @@ class LocalStorage {
   }
 }
 
-class LocalEvents {
-  Future<List<Event>> readEvents() async {
-    final eventsJson = await rootBundle.loadString('assets/events.json');
-    final List<dynamic> eventListJson = jsonDecode(eventsJson);
-    final List<Event> events =
-        eventListJson.map((json) => Event.fromJson(json)).toList();
-
-    return events;
-  }
-}
-
 class MyAppState extends ChangeNotifier {
   final LocalStorage storage = LocalStorage();
-  final LocalEvents localEvents = LocalEvents();
 
   var events = <Event>[];
   var saved = <String>[];
@@ -111,7 +98,6 @@ class _MyHomePageState extends State<MyHomePage> {
     var appState = context.watch<MyAppState>();
 
     appState.storage.readSaved().then((value) => appState.setSaved(value));
-    appState.localEvents.readEvents().then((value) => appState.setEvents(value));
 
     return LayoutBuilder(builder: (context, constraints) {
       return Scaffold(
