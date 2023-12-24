@@ -29,8 +29,6 @@ class _SplashPageState extends State<SplashPage> {
     final eventsJson = await rootBundle.loadString('assets/events.json');
     final List<dynamic> eventListJson = jsonDecode(eventsJson);
 
-    final List<DateTime> dates = [];
-
     eventListJson.forEach((json) {
       (json['Dates'] as String)
           .split(',')
@@ -38,10 +36,6 @@ class _SplashPageState extends State<SplashPage> {
           .map(
               (unparsedDate) => DateFormat('EEEE d MMMM y').parse(unparsedDate))
           .forEach((date) {
-        if (!dates.contains(date)) {
-          dates.add(date);
-        }
-
         _eventService.addEvent(Event(
             id: Uuid().v4(),
             name: json['Event Name'],
@@ -61,13 +55,6 @@ class _SplashPageState extends State<SplashPage> {
             location: _getLocation(json['Location - Theme Camp'],
                 json['Location - Artwork'], json['Location - Other'])));
       });
-    });
-
-    // Sort dates and add to DB
-    dates.sort();
-    dates.forEach((date) {
-      print('Date stored: ' + date.toString());
-      _eventService.addDate(date);
     });
 
     Navigator.of(context).pushReplacement(

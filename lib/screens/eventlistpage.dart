@@ -26,9 +26,15 @@ class _EventListPageState extends State<EventListPage> {
       future: fetchData(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator();
+          return Scaffold(
+              body: Center(
+                  child: SizedBox(
+                      child: CircularProgressIndicator(),
+                      height: 24.0,
+                      width: 24.0)));
         } else if (snapshot.hasError) {
-          return Text('Error: ${snapshot.error}');
+          return Scaffold(
+              body: Center(child: Text('Error: ${snapshot.error}')));
         } else {
           List<dynamic> data = snapshot.data as List<dynamic>;
           List<Event> events = data[0] as List<Event>;

@@ -17,19 +17,15 @@ class EventService {
     return events;
   }
 
-  Future<void> addDate(DateTime date) async {
-    await _repository
-        .addDate({'date': DateFormat('EEEE d MMMM y').format(date)});
-  }
-
   Future<List<DateTime>> getAllDates() async {
-    final List<dynamic> dateListJson = await _repository.getAllDates();
-    final List<DateTime> dates = dateListJson
-        .map((json) => DateFormat('EEEE d MMMM y').parse(json))
+    final List<String> dateList = await _repository.getAllDates();
+    final List<DateTime> dates = dateList
+        .map((date) => DateTime.parse(date))
         .toList();
     return dates;
   }
 
 // Add logic here that converts initial json to events
+
 // Add other methods for business logic
 }

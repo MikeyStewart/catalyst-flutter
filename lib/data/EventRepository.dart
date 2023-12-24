@@ -9,12 +9,8 @@ class EventRepository {
     return await DBHelper.getAllEvents();
   }
 
-  Future<void> addDate(Map<String, dynamic> date) async {
-    await DBHelper.insertEvent(date);
-  }
-
-  Future<List<Map<String, dynamic>>> getAllDates() async {
-    return await DBHelper.getAllDates();
+  Future<List<String>> getAllDates() async {
+    return await DBHelper.getUniqueDates();
   }
 
 // Add other methods for updating, deleting, and querying events

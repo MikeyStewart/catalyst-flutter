@@ -34,11 +34,6 @@ class DBHelper {
             location TEXT
           )
         ''');
-        await db.execute('''
-          CREATE TABLE dates (
-            date TEXT PRIMARY KEY
-          )
-        ''');
       },
     );
   }
@@ -53,14 +48,14 @@ class DBHelper {
     return await db.query('events');
   }
 
-  static Future<void> insertDate(Map<String, dynamic> date) async {
+  static Future<List<String>> getUniqueDates() async {
     final db = await database;
-    await db.insert('dates', date);
-  }
+    final List<Map<String, dynamic>> result = await db.rawQuery('SELECT DISTINCT date FROM events ORDER BY date ASC');
 
-  static Future<List<Map<String, dynamic>>> getAllDates() async {
-    final db = await database;
-    return await db.query('dates');
+    // Extract dates from the result and convert them to a list of strings
+    List<String> uniqueDates = result.map((map) => map['date'] as String).toList();
+
+    return uniqueDates;
   }
 
 // Add other methods for updating, deleting, and querying events

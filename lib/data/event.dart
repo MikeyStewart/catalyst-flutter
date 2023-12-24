@@ -32,7 +32,7 @@ class Event {
           .split(',')
           .map((e) => getCategoryFromName(e))
           .toList(),
-      date: DateFormat('EEEE d MMMM y').parse(map['date']),
+      date: DateTime.parse(map['date']),
       adultWarnings: (map['adultWarnings'] as String).split(',').toList(),
       startTime:
           map['startTime'] != null ? DateTime.parse(map['startTime']) : null,
@@ -48,7 +48,7 @@ class Event {
       'description': description,
       'categories':
           categories.map((category) => category.displayName).toList().join(','),
-      'date': DateFormat('EEEE d MMMM y').format(date),
+      'date': date.toIso8601String(),
       'adultWarnings': adultWarnings.join(','),
       'startTime': startTime?.toIso8601String(),
       'endTime': endTime?.toIso8601String(),
