@@ -62,17 +62,7 @@ class _EventListPageState extends State<EventListPage> {
                 ),
                 body: TabBarView(children: <Widget>[
                   for (DateTime date in dates)
-                    ListView.separated(
-                      separatorBuilder: (BuildContext context, int index) {
-                        return Column(
-                          children: [
-                            SizedBox(height: 8.0),
-                            Divider(),
-                            SizedBox(height: 8.0),
-                          ],
-                        );
-                      },
-                      padding: const EdgeInsets.all(16),
+                    ListView.builder(
                       itemCount:
                           events.where((event) => event.date == date).length,
                       itemBuilder: (context, index) {
