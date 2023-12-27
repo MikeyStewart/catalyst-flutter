@@ -3,8 +3,10 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
+import '../data/EventProvider.dart';
 import '../data/EventService.dart';
 import '../data/category.dart';
 import '../data/event.dart';
@@ -25,6 +27,8 @@ class _SplashPageState extends State<SplashPage> {
   }
 
   Future<void> initializeData() async {
+    final eventProvider = context.read<EventDataProvider>();
+
     // Parse CSV file and initialize your data
     final eventsJson = await rootBundle.loadString('assets/events.json');
     final List<dynamic> eventListJson = jsonDecode(eventsJson);
@@ -57,6 +61,8 @@ class _SplashPageState extends State<SplashPage> {
             saved: false)); // No event will be saved initially
       });
     });
+
+    eventProvider.loadDataFromDatabase();
 
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(builder: (context) => MyHomePage()),

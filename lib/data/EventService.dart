@@ -23,7 +23,7 @@ class EventService {
     return dates;
   }
 
-  Future<void> saveEvent(Event event) async {
+  Future<Event> saveEvent(Event event) async {
     final Event updatedEvent = Event(
         id: event.id,
         name: event.name,
@@ -36,9 +36,10 @@ class EventService {
         location: event.location,
         saved: true);
     await _repository.updateEvent(updatedEvent.toMap());
+    return updatedEvent;
   }
 
-  Future<void> unsaveEvent(Event event) async {
+  Future<Event> unsaveEvent(Event event) async {
     final Event updatedEvent = Event(
         id: event.id,
         name: event.name,
@@ -51,6 +52,7 @@ class EventService {
         location: event.location,
         saved: false);
     await _repository.updateEvent(updatedEvent.toMap());
+    return updatedEvent;
   }
 
 // Add logic here that converts initial json to events
