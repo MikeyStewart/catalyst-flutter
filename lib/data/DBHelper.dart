@@ -46,7 +46,10 @@ class DBHelper {
 
   static Future<List<Map<String, dynamic>>> getAllEvents() async {
     final db = await database;
-    return await db.query('events');
+    return await db.query(
+        'events',
+      orderBy: 'startTime'
+    );
   }
 
   static Future<List<String>> getUniqueDates() async {
