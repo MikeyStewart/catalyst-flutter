@@ -11,6 +11,7 @@ class Event {
   final DateTime? startTime;
   final DateTime? endTime;
   final String location;
+  final bool saved;
 
   Event(
       {required this.id,
@@ -21,7 +22,8 @@ class Event {
       required this.adultWarnings,
       required this.startTime,
       required this.endTime,
-      required this.location});
+      required this.location,
+      required this.saved});
 
   factory Event.fromMap(Map<String, dynamic> map) {
     return Event(
@@ -38,6 +40,7 @@ class Event {
           map['startTime'] != null ? DateTime.parse(map['startTime']) : null,
       endTime: map['endTime'] != null ? DateTime.parse(map['endTime']) : null,
       location: map['location'],
+      saved: map['saved'] == 1,
     );
   }
 
@@ -53,41 +56,9 @@ class Event {
       'startTime': startTime?.toIso8601String(),
       'endTime': endTime?.toIso8601String(),
       'location': location,
+      'saved': saved ? 1 : 0,
     };
   }
-
-// Event.fromJson(Map<String, dynamic> json)
-//     : name = json['Event Name'],
-//       description = json['Description'],
-//       categories = (json['Event Types'] as String)
-//           .split(',')
-//           .where((element) => element.isNotEmpty)
-//           .map((element) => getCategoryFromName(element))
-//           .toList(),
-//       dates = (json['Dates'] as String)
-//           .split(',')
-//           .where((element) => element.isNotEmpty)
-//           .map((unparsedDate) =>
-//               DateFormat('EEEE d MMMM y').parse(unparsedDate))
-//           .toList(),
-//       adultWarnings = (json['Adults Only - Warnings'] as String)
-//           .split(',')
-//           .where((element) => element.isNotEmpty)
-//           .toList(),
-//       startTime = _parseTime(json['Start Time']),
-//       endTime = _parseTime(json['End Time']),
-//       location = _getLocation(json['Location - Theme Camp'],
-//           json['Location - Artwork'], json['Location - Other']);
-
-// Map<String, dynamic> toJson() => {
-//       'Event Name': name,
-//       'Description': description,
-//       'Event Types': categories,
-//       'Dates': dates,
-//       'Start Time': dates,
-//       'End Time': dates,
-//       'Adults Only - Warnings': adultWarnings,
-//     };
 }
 
 extension EventExtension on Event {

@@ -53,7 +53,8 @@ class _SplashPageState extends State<SplashPage> {
             startTime: _parseTime(json['Start Time']),
             endTime: _parseTime(json['End Time']),
             location: _getLocation(json['Location - Theme Camp'],
-                json['Location - Artwork'], json['Location - Other'])));
+                json['Location - Artwork'], json['Location - Other']),
+            saved: false)); // No event will be saved initially
       });
     });
 

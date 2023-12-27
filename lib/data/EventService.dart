@@ -1,5 +1,4 @@
 import 'package:catalyst_flutter/data/event.dart';
-import 'package:intl/intl.dart';
 
 import 'EventRepository.dart';
 
@@ -19,13 +18,40 @@ class EventService {
 
   Future<List<DateTime>> getAllDates() async {
     final List<String> dateList = await _repository.getAllDates();
-    final List<DateTime> dates = dateList
-        .map((date) => DateTime.parse(date))
-        .toList();
+    final List<DateTime> dates =
+        dateList.map((date) => DateTime.parse(date)).toList();
     return dates;
   }
 
-// Add logic here that converts initial json to events
+  Future<void> saveEvent(Event event) async {
+    final Event updatedEvent = Event(
+        id: event.id,
+        name: event.name,
+        description: event.description,
+        categories: event.categories,
+        date: event.date,
+        adultWarnings: event.adultWarnings,
+        startTime: event.startTime,
+        endTime: event.endTime,
+        location: event.location,
+        saved: true);
+    await _repository.updateEvent(updatedEvent.toMap());
+  }
 
-// Add other methods for business logic
+  Future<void> unsaveEvent(Event event) async {
+    final Event updatedEvent = Event(
+        id: event.id,
+        name: event.name,
+        description: event.description,
+        categories: event.categories,
+        date: event.date,
+        adultWarnings: event.adultWarnings,
+        startTime: event.startTime,
+        endTime: event.endTime,
+        location: event.location,
+        saved: false);
+    await _repository.updateEvent(updatedEvent.toMap());
+  }
+
+// Add logic here that converts initial json to events
 }

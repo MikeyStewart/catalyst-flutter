@@ -13,5 +13,7 @@ class EventRepository {
     return await DBHelper.getUniqueDates();
   }
 
-// Add other methods for updating, deleting, and querying events
+  Future<void> updateEvent(Map<String, dynamic> event) async {
+    await DBHelper.updateEvent(event);
+  }
 }

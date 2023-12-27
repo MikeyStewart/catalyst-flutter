@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:add_2_calendar/add_2_calendar.dart' as Calendar;
 
+import '../data/EventService.dart';
+
 class EventPage extends StatelessWidget {
   EventPage(this.event);
 
@@ -95,14 +97,7 @@ class EventPage extends StatelessWidget {
                       icon: Icon(Icons.calendar_month_rounded),
                     ),
                   ),
-                  FractionallySizedBox(
-                    widthFactor: 0.8,
-                    child: FilledButton.icon(
-                      onPressed: () {},
-                      label: Text('Save'),
-                      icon: Icon(Icons.favorite_outline),
-                    ),
-                  ),
+                  SaveButton(event),
                 ],
               ),
             ),
@@ -119,6 +114,40 @@ class EventPage extends StatelessWidget {
         ]),
       ),
     );
+  }
+}
+
+class SaveButton extends StatelessWidget {
+  final EventService _eventService = EventService();
+  final Event event;
+
+  SaveButton(this.event);
+
+  @override
+  Widget build(BuildContext context) {
+    if (event.saved) {
+      return FractionallySizedBox(
+        widthFactor: 0.8,
+        child: FilledButton.icon(
+          onPressed: () {
+            _eventService.unsaveEvent(event);
+          },
+          label: Text('Saved'),
+          icon: Icon(Icons.favorite),
+        ),
+      );
+    } else {
+      return FractionallySizedBox(
+        widthFactor: 0.8,
+        child: FilledButton.icon(
+          onPressed: () {
+            _eventService.saveEvent(event);
+          },
+          label: Text('Save'),
+          icon: Icon(Icons.favorite_outline),
+        ),
+      );
+    }
   }
 }
 

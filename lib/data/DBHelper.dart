@@ -31,7 +31,8 @@ class DBHelper {
             adultWarnings TEXT,
             startTime TEXT,
             endTime TEXT,
-            location TEXT
+            location TEXT,
+            saved INTEGER  -- Integer used to represent a boolean (0 for false, 1 for true)
           )
         ''');
       },
@@ -58,5 +59,15 @@ class DBHelper {
     return uniqueDates;
   }
 
-// Add other methods for updating, deleting, and querying events
+  static Future<void> updateEvent(Map<String, dynamic> event) async {
+    final db = await database;
+
+    await db.update(
+      'events',
+      event,
+      where: 'id = ?',
+      whereArgs: [event['id']],
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
 }
