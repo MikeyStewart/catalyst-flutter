@@ -22,13 +22,13 @@ class EventSection extends StatelessWidget {
               Expanded(
                 child: AspectRatio(
                   aspectRatio: 2 / 1,
-                  child: CategoryCard(category: 'All events'),
+                  child: EventSectionCard(filter: ListFilter.All),
                 ),
               ),
               Expanded(
                 child: AspectRatio(
                   aspectRatio: 2 / 1,
-                  child: CategoryCard(category: 'Saved events'),
+                  child: EventSectionCard(filter: ListFilter.Saved),
                 ),
               ),
             ],
@@ -39,18 +39,24 @@ class EventSection extends StatelessWidget {
   }
 }
 
-class CategoryCard extends StatelessWidget {
-  final String category;
+class EventSectionCard extends StatelessWidget {
+  final ListFilter filter;
 
-  CategoryCard({required this.category});
+  EventSectionCard({required this.filter});
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    String title = switch (filter) {
+      ListFilter.All => 'All events',
+      ListFilter.Saved => 'Saved events',
+    };
+
+    return InkWell(
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => EventListPage()),
+          MaterialPageRoute(
+              builder: (context) => EventListPage(filter: filter)),
         );
       },
       child: Card(
@@ -58,7 +64,7 @@ class CategoryCard extends StatelessWidget {
             child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Text(
-            category,
+            title,
             textAlign: TextAlign.center,
           ),
         )),
