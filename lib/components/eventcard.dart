@@ -5,18 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../data/EventProvider.dart';
-import '../data/EventService.dart';
 
-class EventCard extends StatefulWidget {
+class EventCard extends StatelessWidget {
   final Event event;
 
   EventCard({required this.event});
 
-  @override
-  _EventCardState createState() => _EventCardState();
-}
-
-class _EventCardState extends State<EventCard> {
   @override
   Widget build(BuildContext context) {
     final eventProvider = context.read<EventDataProvider>();
@@ -26,7 +20,7 @@ class _EventCardState extends State<EventCard> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => EventPage(widget.event),
+            builder: (context) => EventPage(event),
           ),
         );
       },
@@ -43,7 +37,7 @@ class _EventCardState extends State<EventCard> {
                   child: Column(
                     children: [
                       Text(
-                        widget.event.prettyTime,
+                        event.prettyTime,
                         style: Theme.of(context).textTheme.labelLarge!.apply(
                             color:
                                 Theme.of(context).colorScheme.onSurfaceVariant),
@@ -68,7 +62,7 @@ class _EventCardState extends State<EventCard> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      widget.event.name,
+                                      event.name,
                                       style: Theme.of(context)
                                           .textTheme
                                           .titleMedium!
@@ -79,7 +73,7 @@ class _EventCardState extends State<EventCard> {
                                     ),
                                     SizedBox(height: 8.0),
                                     Text(
-                                      'at ' + widget.event.location,
+                                      'at ' + event.location,
                                       style: Theme.of(context)
                                           .textTheme
                                           .labelLarge!
@@ -95,15 +89,14 @@ class _EventCardState extends State<EventCard> {
                               alignment: Alignment.topRight,
                               child: IconButton(
                                   onPressed: () {
-                                    if (widget.event.saved) {
-                                      eventProvider.unsaveEvent(widget.event);
+                                    if (event.saved) {
+                                      eventProvider.unsaveEvent(event);
                                     } else {
-                                      eventProvider.saveEvent(widget.event);
+                                      eventProvider.saveEvent(event);
                                     }
-                                    setState(() {});
                                   },
                                   color: Theme.of(context).colorScheme.primary,
-                                  icon: Icon(widget.event.saved
+                                  icon: Icon(event.saved
                                       ? Icons.favorite
                                       : Icons.favorite_outline)),
                             )
@@ -111,20 +104,18 @@ class _EventCardState extends State<EventCard> {
                         ),
                         SizedBox(height: 8.0),
                         Text(
-                          widget.event.description,
+                          event.description,
                           maxLines: 5,
                           overflow: TextOverflow.ellipsis,
                         ),
                         SizedBox(height: 8.0),
                         Text(
-                          widget.event.categories
-                              .map((e) => e.displayName)
-                              .join(', '),
+                          event.categories.map((e) => e.displayName).join(', '),
                           style: TextStyle(
                             fontStyle: FontStyle.italic,
                           ),
                         ),
-                        if (widget.event.adultWarnings.isNotEmpty)
+                        if (event.adultWarnings.isNotEmpty)
                           Padding(
                             padding: const EdgeInsets.only(top: 8.0),
                             child: Text('R18'),
