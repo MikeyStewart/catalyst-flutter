@@ -1,12 +1,13 @@
 import 'package:catalyst_flutter/components/eventcard.dart';
 import 'package:catalyst_flutter/data/EventProvider.dart';
+import 'package:catalyst_flutter/data/category.dart';
 import 'package:catalyst_flutter/data/event.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class EventListPage extends StatelessWidget {
-  final ListFilter filter;
+  final FilterInfo filter;
 
   const EventListPage({super.key, required this.filter});
 
@@ -16,22 +17,14 @@ class EventListPage extends StatelessWidget {
 
     return Consumer<EventDataProvider>(
         builder: (context, eventProvider, child) {
-      // List<Event> events = switch(filter) {
-      //   ListFilter.All => eventProvider.events,
-      //   ListFilter.Saved => eventProvider.savedEvents,
-      // };
       List<Event> events = eventProvider.events;
-      String title = switch (filter) {
-        ListFilter.All => 'Events',
-        ListFilter.Saved => 'Saved',
-      };
 
       return DefaultTabController(
           length: eventProvider.dates.length,
           child: Scaffold(
             appBar: AppBar(
               centerTitle: true,
-              title: Text(title),
+              title: Text(filter.name),
               bottom: TabBar(isScrollable: true, tabs: <Widget>[
                 for (DateTime date in eventProvider.dates)
                   Tab(
@@ -50,15 +43,13 @@ class EventListPage extends StatelessWidget {
                 ListView.builder(
                   itemCount: events
                       .where((event) => event.date == date)
-                      .where((event) =>
-                          filter == ListFilter.Saved ? event.saved : true)
+                      .where((event) => filter.filter(event))
                       .length,
                   itemBuilder: (context, index) {
                     return EventCard(
                         event: events
                             .where((event) => event.date == date)
-                            .where((event) =>
-                                filter == ListFilter.Saved ? event.saved : true)
+                            .where((event) => filter.filter(event))
                             .toList()[index]);
                   },
                 ),
@@ -68,7 +59,9 @@ class EventListPage extends StatelessWidget {
   }
 }
 
-enum ListFilter {
-  All,
-  Saved,
+class FilterInfo {
+  final String name;
+  final bool Function(Event) filter;
+
+  FilterInfo(this.name, this.filter);
 }

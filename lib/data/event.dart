@@ -68,13 +68,14 @@ extension EventExtension on Event {
     String end = '';
     if (startTime != null) {
       start = timeFormat.format(startTime!);
+      start = start.replaceAll(RegExp(r'\s+'), '\n');
     }
     // if (endTime != null) {
     //   start += ' - ';
     //   end = timeFormat.format(endTime!);
     // }
     if (startTime == null && endTime == null) {
-      start = 'All day';
+      start = 'All\nday';
     }
 
     return start;
@@ -82,14 +83,15 @@ extension EventExtension on Event {
 
   String get shareMessage {
     DateFormat prettyDateFormat = DateFormat('E dd MMM');
-    return 'Check out this event!\n\n' +
+    return 'Chirp chirp! A little birdie informed me about ' +
         name +
-        '\n\n' +
-        'It\'s happening at ' +
+        ' happening at ' +
         location +
         ' at ' +
         prettyTime +
         ' on ' +
-        prettyDateFormat.format(date);
+        prettyDateFormat.format(date) +
+        '\n\n' +
+        description;
   }
 }

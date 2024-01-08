@@ -41,7 +41,7 @@ class _CountDownState extends State<CountDown> {
             padding: const EdgeInsets.only(bottom: 8.0),
             child: Text(
               'The Effigy burns in...',
-              style: TextStyle(fontSize: 18.0),
+              style: TextStyle(fontSize: 18.0, color: Colors.white),
             ),
           ),
           Row(
@@ -91,9 +91,9 @@ class CountDownItem extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(value,
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 40)),
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 40, color: Colors.white)),
           Text(label,
-              style: TextStyle(fontWeight: FontWeight.normal, fontSize: 14)),
+              style: TextStyle(fontWeight: FontWeight.normal, fontSize: 14, color: Colors.white)),
         ],
       ),
     );
