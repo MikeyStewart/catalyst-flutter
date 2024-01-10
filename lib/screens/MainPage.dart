@@ -1,7 +1,5 @@
 import 'dart:convert';
 
-import 'package:catalyst_flutter/components/carousel.dart';
-import 'package:catalyst_flutter/components/countdown.dart';
 import 'package:catalyst_flutter/screens/eventlistpage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -9,19 +7,21 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
-import '../components/eventsection.dart';
-import '../components/map.dart';
 import '../data/EventProvider.dart';
 import '../data/EventService.dart';
 import '../data/category.dart';
 import '../data/event.dart';
-import '../main.dart';
 
 class MainPage extends StatelessWidget {
   final EventService _eventService = EventService();
 
   Future<void> initializeData(BuildContext context) async {
     final eventProvider = context.read<EventDataProvider>();
+
+    await eventProvider.loadDataFromDatabase();
+
+    // Only save events to DB if there are none already
+    if (eventProvider.events.isNotEmpty) return;
 
     // Parse CSV file and initialize your data
     final eventsJson = await rootBundle.loadString('assets/events.json');
