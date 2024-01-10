@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 
+import 'package:text_scroll/text_scroll.dart';
+
 class CountDown extends StatefulWidget {
   @override
   _CountDownState createState() => _CountDownState();
@@ -32,40 +34,31 @@ class _CountDownState extends State<CountDown> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(32.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(bottom: 8.0),
-            child: Text(
-              'The Effigy burns in...',
-              style: TextStyle(fontSize: 18.0, color: Colors.white),
-            ),
+    return Container(
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: <Color>[Colors.orange, Colors.deepOrange]),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            'The effigy burns in: ' +
+                '\n'+
+                countdownDuration.inDays.toString() +
+                ' days, ' +
+                countdownDuration.inHours.remainder(24).toString() +
+                ' hours, ' +
+                countdownDuration.inMinutes.remainder(60).toString() +
+                ' minutes, ' +
+                countdownDuration.inSeconds.remainder(60).toString() +
+                ' seconds.',
+            style: TextStyle(color: Colors.white),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              CountDownItem(
-                value: countdownDuration.inDays.toString(),
-                label: 'Days',
-              ),
-              CountDownItem(
-                value: countdownDuration.inHours.remainder(24).toString(),
-                label: 'Hours',
-              ),
-              CountDownItem(
-                value: countdownDuration.inMinutes.remainder(60).toString(),
-                label: 'Minutes',
-              ),
-              CountDownItem(
-                value: countdownDuration.inSeconds.remainder(60).toString(),
-                label: 'Seconds',
-              ),
-            ],
-          )
-        ],
+        ),
       ),
     );
   }
@@ -91,9 +84,15 @@ class CountDownItem extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(value,
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 40, color: Colors.white)),
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 40,
+                  color: Colors.white)),
           Text(label,
-              style: TextStyle(fontWeight: FontWeight.normal, fontSize: 14, color: Colors.white)),
+              style: TextStyle(
+                  fontWeight: FontWeight.normal,
+                  fontSize: 14,
+                  color: Colors.white)),
         ],
       ),
     );

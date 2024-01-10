@@ -29,7 +29,7 @@ class Map extends StatelessWidget {
                 );
               },
               openBuilder: (BuildContext context, VoidCallback callback) {
-                return ExpandedMap(onClose: callback);
+                return Container(); //ExpandedMap(onClose: callback);
               })
         ],
       ),
@@ -77,9 +77,7 @@ class CollapsedMap extends StatelessWidget {
 }
 
 class ExpandedMap extends StatelessWidget {
-  final VoidCallback onClose;
-
-  ExpandedMap({required this.onClose});
+  ExpandedMap();
 
   @override
   Widget build(BuildContext context) {
@@ -103,7 +101,7 @@ class ExpandedMap extends StatelessWidget {
           child: Center(
             child: FloatingActionButton(
                 onPressed: () {
-                  onClose();
+                  Navigator.pop(context);
                 },
                 child: Icon(Icons.close)),
           ))

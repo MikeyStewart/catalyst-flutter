@@ -73,12 +73,12 @@ class EventSectionCard extends StatelessWidget {
     return FilledButton.tonal(
         clipBehavior: Clip.hardEdge,
         onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) =>
-                    EventListPage(filter: FilterInfo(title, filter))),
-          );
+          // Navigator.push(
+          //   context,
+          //   MaterialPageRoute(
+          //       builder: (context) =>
+          //           EventListPage(filter: FilterInfo(title, filter))),
+          // );
         },
         child: LayoutBuilder(builder: (context, constraints) {
           return Stack(clipBehavior: Clip.none, children: [

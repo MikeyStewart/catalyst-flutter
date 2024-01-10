@@ -27,14 +27,14 @@ class Carousel extends StatelessWidget {
                 avatar: Icon(cat.icon),
                 label: Text(cat.displayName),
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => EventListPage(
-                                filter: FilterInfo(cat.displayName, (event) {
-                              return event.categories.contains(cat);
-                            }))),
-                  );
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //       builder: (context) => EventListPage(
+                  //               filter: FilterInfo(cat.displayName, (event) {
+                  //             return event.categories.contains(cat);
+                  //           }))),
+                  // );
                 },
               )
           ],

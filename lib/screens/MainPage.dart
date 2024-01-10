@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:catalyst_flutter/components/carousel.dart';
 import 'package:catalyst_flutter/components/countdown.dart';
+import 'package:catalyst_flutter/screens/eventlistpage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -16,38 +17,10 @@ import '../data/category.dart';
 import '../data/event.dart';
 import '../main.dart';
 
-class MainPage extends StatefulWidget {
-  @override
-  _MainPageState createState() => _MainPageState();
-}
-
-class _MainPageState extends State<MainPage>
-    with SingleTickerProviderStateMixin {
+class MainPage extends StatelessWidget {
   final EventService _eventService = EventService();
-  late AnimationController _controller;
-  late Animation<Offset> _offsetAnimation;
 
-  @override
-  void initState() {
-    super.initState();
-
-    // Create an animation controller with a duration
-    _controller = AnimationController(
-      vsync: this,
-      duration: Duration(seconds: 1),
-    );
-
-    // Create an offset animation with a curve
-    _offsetAnimation = Tween<Offset>(
-      begin: Offset(0.0, 1.0), // Offscreen below the screen
-      end: Offset(0.0, 0.0), // Onscreen
-    ).animate(CurvedAnimation(
-      parent: _controller,
-      curve: Curves.easeOut, // Choose an appropriate curve
-    ));
-  }
-
-  Future<void> initializeData(Function onComplete) async {
+  Future<void> initializeData(BuildContext context) async {
     final eventProvider = context.read<EventDataProvider>();
 
     // Parse CSV file and initialize your data
@@ -85,52 +58,24 @@ class _MainPageState extends State<MainPage>
 
     eventProvider.loadDataFromDatabase();
 
-    await Future.delayed(Duration(seconds: 1));
-
-    onComplete();
+    await Future.delayed(Duration(seconds: 3));
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Builder(builder: (context) {
-        initializeData(() {
-          _controller.forward();
-        });
-
-        return Stack(children: [
-          Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: <Color>[Colors.orange, Colors.deepOrange]),
-            ),
-            child: SafeArea(child: CountDown()),
-          ),
-          SlideTransition(
-            position: _offsetAnimation,
-            child: DraggableScrollableSheet(
-              initialChildSize: 0.70,
-              minChildSize: 0.70,
-              builder:
-                  (BuildContext context, ScrollController scrollController) {
-                return SingleChildScrollView(
-                  controller: scrollController,
-                  child: BottomSheetContent(),
-                );
-              },
-            ),
-          ),
-        ]);
-      }),
+    return FutureBuilder(
+      future: initializeData(context),
+      builder: (context, AsyncSnapshot<void> snapshot) {
+        switch (snapshot.connectionState) {
+          case ConnectionState.done:
+            return EventListPage();
+          default:
+            return Container(
+              color: Theme.of(context).colorScheme.primary,
+            );
+        }
+      },
     );
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
   }
 }
 
@@ -154,30 +99,5 @@ String _getLocation(String themeCamp, String artwork, String elsewhere) {
     return elsewhere;
   } else {
     return 'unknown';
-  }
-}
-
-class BottomSheetContent extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: Theme.of(context).colorScheme.background,
-      child: Column(
-        children: [
-          EventSection(),
-          Carousel('title'),
-          Map(),
-          SizedBox(height: 180.0),
-          Text('Categories carousel'),
-          SizedBox(height: 180.0),
-          Text('Theme camps carousel'),
-          SizedBox(height: 180.0),
-          Text('Events on now'),
-          SizedBox(height: 180.0),
-          Text('About app'),
-          SizedBox(height: 180.0),
-        ],
-      ),
-    );
   }
 }
