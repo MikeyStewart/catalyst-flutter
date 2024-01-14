@@ -10,7 +10,7 @@
     </queries>
 
     <application
-        android:label="catalyst_flutter"
+        android:label="Catalyst"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
 

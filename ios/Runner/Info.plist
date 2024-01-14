@@ -5,13 +5,13 @@
 	<key>NSCalendarsUsageDescription</key>
 	<string>Add events to calendar app</string>
 	<key>NSContactsUsageDescription</key>
-    <string>Add events to calendar app</string>
+	<string>Add events to calendar app</string>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Catalyst: Kiwiburn Guide</string>
+	<string>Catalyst</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>

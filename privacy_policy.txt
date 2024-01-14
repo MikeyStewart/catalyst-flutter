@@ -1,0 +1,35 @@
+Privacy Policy for Catalyst: KiwiBurn Guide
+
+Last updated: January 14 2024
+
+[Catalyst: KiwiBurn Guide] ("us," "we," or "our") is developed by Mikey Stewart as an individual and operates the Catalyst: KiwiBurn Guide mobile application (the "Service"). This page informs you of our policies regarding the collection, use, and disclosure of personal data when you use our Service and the choices you have associated with that data.
+
+Information Collection and Use
+Personal Data
+
+[Catalyst: KiwiBurn Guide] does not collect any personal information. The app does not request, store, or process any personal data.
+
+Calendar Permissions
+
+The app requires read and write calendar permissions solely for the purpose of adding events from the app to the user's calendar. This data is used locally on the user's device and is not transmitted or stored by [Catalyst: KiwiBurn Guide].
+
+Data Retention
+The calendar data processed by [Catalyst: KiwiBurn Guide] is retained locally on the user's device and is not stored or accessed by the developer. The app does not have any backend servers or databases associated with it.
+
+Security
+[Catalyst: KiwiBurn Guide] prioritizes the security of user data. The app operates in a way that limits data access to the user's device only. No personal information is transmitted or stored externally.
+
+Children's Privacy
+[Catalyst: KiwiBurn Guide] does not collect any personally identifiable information from anyone, including those under the age of 13. If you are a parent or guardian and you are concerned about your child's interactions with this application, please contact us so that we can take necessary action.
+
+Changes to This Privacy Policy
+We may update our Privacy Policy from time to time. Thus, you are advised to review this page periodically for any changes. We will notify you of any changes by posting the new Privacy Policy on this page.
+
+Contact Us
+If you have any questions or suggestions about our Privacy Policy, do not hesitate to contact us at mikeystewartdev@gmail.com.
+
+By using [Catalyst: KiwiBurn Guide], you agree to this policy. If you do not agree to this policy, please do not use our Service.
+
+[Catalyst: KiwiBurn Guide]
+Mikey Stewart
+mikeystewartdev@gmail.com

@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'dart:math';
 
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:catalyst_flutter/screens/eventlistpage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -24,7 +26,7 @@ class MainPage extends StatelessWidget {
     if (eventProvider.events.isNotEmpty) return;
 
     // Parse CSV file and initialize your data
-    final eventsJson = await rootBundle.loadString('assets/events.json');
+    final eventsJson = await rootBundle.loadString('assets/events24.json');
     final List<dynamic> eventListJson = jsonDecode(eventsJson);
 
     eventListJson.forEach((json) {
@@ -70,11 +72,90 @@ class MainPage extends StatelessWidget {
           case ConnectionState.done:
             return EventListPage();
           default:
-            return Container(
-              color: Theme.of(context).colorScheme.primary,
-            );
+            return SplashPage();
         }
       },
+    );
+  }
+}
+
+class SplashPage extends StatelessWidget {
+  const SplashPage({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
+    double imageSize = min(screenWidth, screenHeight);
+
+    const Color lightOrangeFaded = Color(0xCCFF9800);
+    const Color darkOrangeFaded = Color(0xCCFF5722);
+
+    return Material(
+      child: Stack(children: [
+        Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: <Color>[Colors.orange, Colors.deepOrange]),
+          ),
+        ),
+        Positioned(
+            left: -(imageSize / 6),
+            bottom: -(imageSize / 6),
+            child: SizedBox(
+                width: imageSize,
+                child: ColorFiltered(
+                  colorFilter: ColorFilter.mode(
+                    Colors.transparent.withAlpha(200),
+                    BlendMode
+                        .srcATop, // Choose a blend mode that suits your needs
+                  ),
+                  child: Image.asset(
+                    'assets/catalyst_logo_black.png',
+                  ),
+                ))),
+        Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: <Color>[lightOrangeFaded, darkOrangeFaded]),
+          ),
+        ),
+        Align(
+            alignment: Alignment.topCenter,
+            child: FractionallySizedBox(
+                heightFactor: 0.66,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Catalyst',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 40,
+                          color: Colors.white),
+                    ),
+                    SizedBox(height: 32.0),
+                    AnimatedTextKit(
+                      totalRepeatCount: 1,
+                      pause: Duration(milliseconds: 1000),
+                      animatedTexts: [
+                        TyperAnimatedText(
+                          'Loading events...',
+                          textStyle: TextStyle(color: Colors.white),
+                          speed: Duration(milliseconds: 200),
+                        ),
+                      ],
+                    ),
+                  ],
+                ))),
+      ]),
     );
   }
 }

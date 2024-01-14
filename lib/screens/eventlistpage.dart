@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:catalyst_flutter/components/eventcard.dart';
 import 'package:catalyst_flutter/components/map.dart';
 import 'package:catalyst_flutter/data/EventProvider.dart';
@@ -31,7 +33,7 @@ class _EventListPageState extends State<EventListPage> {
           child: Scaffold(
             appBar: AppBar(
               centerTitle: true,
-              title: Text('Events'),
+              title: Text('Event Guide'),
               bottom: TabBar(isScrollable: true, tabs: <Widget>[
                 for (DateTime date in eventProvider.dates)
                   Tab(
@@ -81,45 +83,75 @@ class _EventListPageState extends State<EventListPage> {
                         ));
               },
               label: Text('Filter (' +
-                  (selectedCategoryFilters.length +
-                          selectedMainFilters
-                              .where((filter) => filter != 'All events')
-                              .length)
+                  (events
+                          .filter(selectedMainFilters, selectedCategoryFilters)
+                          .length)
                       .toString() +
                   ')'),
               icon: Icon(Icons.filter_list),
             ),
             body: TabBarView(children: <Widget>[
               for (DateTime date in eventProvider.dates)
-                ListView.builder(
-                  itemCount: events
-                      .where((event) => event.date == date)
-                      .where((event) => selectedMainFilters.contains('Saved')
-                          ? event.saved
-                          : true)
-                      .where((event) => selectedCategoryFilters.isNotEmpty
-                          ? event.categories.any((category) =>
-                              selectedCategoryFilters.contains(category))
-                          : true)
-                      .length,
-                  itemBuilder: (context, index) {
-                    return EventCard(
-                        event: events
+                (events
+                        .where((event) => event.date == date)
+                        .toList()
+                        .filter(selectedMainFilters, selectedCategoryFilters)
+                        .isEmpty)
+                    ? EmptyView()
+                    : ListView.builder(
+                        itemCount: events
                             .where((event) => event.date == date)
-                            .where((event) =>
-                                selectedMainFilters.contains('Saved')
-                                    ? event.saved
-                                    : true)
-                            .where((event) => selectedCategoryFilters.isNotEmpty
-                                ? event.categories.any((category) =>
-                                    selectedCategoryFilters.contains(category))
-                                : true)
-                            .toList()[index]);
-                  },
-                ),
+                            .toList()
+                            .filter(
+                                selectedMainFilters, selectedCategoryFilters)
+                            .length,
+                        itemBuilder: (context, index) {
+                          return EventCard(
+                              event: events
+                                  .where((event) => event.date == date)
+                                  .toList()
+                                  .filter(selectedMainFilters,
+                                      selectedCategoryFilters)[index]);
+                        },
+                      ),
             ]),
           ));
     });
+  }
+}
+
+class EmptyView extends StatelessWidget {
+  const EmptyView({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
+    double imageSize = min(screenWidth, screenHeight) / 2.0;
+
+    return Center(
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+                width: imageSize, child: Image.asset('assets/sleepy_cat.png')),
+            Padding(
+              padding: const EdgeInsets.all(32.0),
+              child: Text(
+                'There\'s nothing here... Check out the other days or try adjusting the filters.',
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.titleMedium!.apply(
+                    color: Theme.of(context).colorScheme.onSurfaceVariant),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
   }
 }
 
@@ -172,10 +204,24 @@ class _FilterSheetState extends State<FilterSheet> {
         padding: EdgeInsets.all(16.0),
         controller: controller,
         children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text('Filter',
-                style: Theme.of(context).textTheme.headlineSmall),
+          Row(
+            children: [
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text('Filter',
+                      style: Theme.of(context).textTheme.headlineSmall),
+                ),
+              ),
+              IconButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  icon: Icon(
+                    Icons.close,
+                    color: Theme.of(context).primaryColor,
+                  ))
+            ],
           ),
           SizedBox(height: 16.0),
           Wrap(
@@ -184,7 +230,16 @@ class _FilterSheetState extends State<FilterSheet> {
             children: <Widget>[
               for (String filter in mainFilters)
                 FilterChip(
-                  label: Text(filter),
+                  label: (filter == 'Saved')
+                      ? Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(Icons.favorite),
+                            SizedBox(width: 4.0),
+                            Text(filter),
+                          ],
+                        )
+                      : Text(filter, overflow: TextOverflow.ellipsis),
                   showCheckmark: true,
                   selected: selectedMainFilters.contains(filter),
                   onSelected: (bool selected) {
@@ -228,14 +283,17 @@ class _FilterSheetState extends State<FilterSheet> {
             children: <Widget>[
               for (Category category in Category.values)
                 FilterChip(
-                  label: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(category.icon),
-                      SizedBox(width: 4.0),
-                      Text(category.displayName),
-                    ],
+                  label: IntrinsicWidth(
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(category.icon),
+                        SizedBox(width: 4.0),
+                        Expanded(child: Text(category.displayName, overflow: TextOverflow.ellipsis)),
+                      ],
+                    ),
                   ),
+                  clipBehavior: Clip.hardEdge,
                   showCheckmark: true,
                   selected: selectedCategoryFilters.contains(category),
                   onSelected: (bool selected) {

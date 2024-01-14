@@ -35,7 +35,9 @@ class Event {
           .map((e) => getCategoryFromName(e))
           .toList(),
       date: DateTime.parse(map['date']),
-      adultWarnings: (map['adultWarnings'] as String).split(',').toList(),
+      adultWarnings: (map['adultWarnings'] as String)
+          .split(',')
+          .toList(),
       startTime:
           map['startTime'] != null ? DateTime.parse(map['startTime']) : null,
       endTime: map['endTime'] != null ? DateTime.parse(map['endTime']) : null,
@@ -70,15 +72,34 @@ extension EventExtension on Event {
       start = timeFormat.format(startTime!);
       start = start.replaceAll(RegExp(r'\s+'), '\n');
     }
-    // if (endTime != null) {
-    //   start += ' - ';
-    //   end = timeFormat.format(endTime!);
-    // }
     if (startTime == null && endTime == null) {
       start = 'All\nday';
     }
 
     return start;
+  }
+
+  String get prettyFullTime {
+    DateFormat timeFormat = DateFormat("jm");
+    String start = '';
+    String end = '';
+    if (startTime != null) {
+      start = timeFormat.format(startTime!);
+    }
+    if (endTime != null) {
+      start += ' - ';
+      end = timeFormat.format(endTime!);
+    }
+    if (startTime == null && endTime == null) {
+      start = 'All day';
+    }
+
+    return start + end;
+  }
+
+  String get prettyDate {
+    DateFormat prettyDateFormat = DateFormat('E dd MMM');
+    return prettyDateFormat.format(date);
   }
 
   String get shareMessage {
@@ -93,5 +114,19 @@ extension EventExtension on Event {
         prettyDateFormat.format(date) +
         '\n\n' +
         description;
+  }
+}
+
+extension EventListExtension<T> on List<Event> {
+  List<Event> filter(
+      Set<String> selectedMainFilters, Set<Category> selectedCategoryFilters) {
+    return this
+        .where((event) =>
+            selectedMainFilters.contains('Saved') ? event.saved : true)
+        .where((event) => selectedCategoryFilters.isNotEmpty
+            ? event.categories
+                .any((category) => selectedCategoryFilters.contains(category))
+            : true)
+        .toList();
   }
 }
