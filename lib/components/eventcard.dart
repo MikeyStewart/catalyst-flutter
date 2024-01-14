@@ -73,7 +73,7 @@ class EventCard extends StatelessWidget {
                                     ),
                                     SizedBox(height: 8.0),
                                     Text(
-                                      'at ' + event.location,
+                                      event.location,
                                       style: Theme.of(context)
                                           .textTheme
                                           .labelLarge!
