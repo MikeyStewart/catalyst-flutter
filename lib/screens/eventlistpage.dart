@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:catalyst_flutter/components/countdown.dart';
 import 'package:catalyst_flutter/components/eventcard.dart';
 import 'package:catalyst_flutter/components/map.dart';
 import 'package:catalyst_flutter/data/EventProvider.dart';
@@ -89,7 +90,10 @@ class _EventListPageState extends State<EventListPage> {
                       .toString() +
                   ')'),
               icon: Icon(Icons.filter_list),
+              backgroundColor: Theme.of(context).colorScheme.primary,
+              foregroundColor: Theme.of(context).colorScheme.onPrimary,
             ),
+            bottomNavigationBar: CountDown(),
             body: TabBarView(children: <Widget>[
               for (DateTime date in eventProvider.dates)
                 (events

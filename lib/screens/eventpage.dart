@@ -53,8 +53,12 @@ class EventPage extends StatelessWidget {
                     // StretchMode.fadeTitle,
                   ],
                   centerTitle: false,
-                  title: Text(event.name,
-                      style: Theme.of(context).textTheme.labelLarge!),
+                  expandedTitleScale: 1.5,
+                  title: Padding(
+                    padding: const EdgeInsets.only(right: 48.0),
+                    child: Text(event.name,
+                        style: Theme.of(context).textTheme.labelLarge!),
+                  ),
                 ),
                 actions: [
                   IconButton(
@@ -63,6 +67,7 @@ class EventPage extends StatelessWidget {
                     onPressed: () {
                       Share.share(event.shareMessage);
                     },
+                    color: Theme.of(context).colorScheme.primary,
                   ),
                 ],
               ),
@@ -142,7 +147,10 @@ class Details extends StatelessWidget {
 
                     Calendar.Add2Calendar.addEvent2Cal(calendarEvent);
                   },
-                  icon: Icon(Icons.add_circle_outline_outlined))
+                  icon: Icon(
+                    Icons.add_circle_outline_outlined,
+                    color: Theme.of(context).colorScheme.primary,
+                  ))
             ],
           ),
           SizedBox(height: 16.0),

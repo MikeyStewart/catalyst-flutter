@@ -1,3 +1,4 @@
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 
@@ -41,26 +42,75 @@ class _CountDownState extends State<CountDown> {
             end: Alignment.bottomCenter,
             colors: <Color>[Colors.orange, Colors.deepOrange]),
       ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: Align(
-          alignment: Alignment.centerLeft,
-          child: Text(
-            'The effigy burns in: ' +
-                '\n'+
-                countdownDuration.inDays.toString() +
-                ' days, ' +
-                countdownDuration.inHours.remainder(24).toString() +
-                ' hours, ' +
-                countdownDuration.inMinutes.remainder(60).toString() +
-                ' minutes, ' +
-                countdownDuration.inSeconds.remainder(60).toString() +
-                ' seconds.',
-            style: TextStyle(color: Colors.white),
+      child: Row(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Text(
+              'The effigy burns in: ',
+              style: TextStyle(color: Colors.white),
+            ),
           ),
-        ),
+          AnimatedTextKit(
+            repeatForever: true,
+            animatedTexts: [
+              RotateAnimatedText(
+                countdownDuration.inDays.toString() + ' days, ',
+                textStyle: TextStyle(color: Colors.white),
+              ),
+              RotateAnimatedText(
+                countdownDuration.inHours.remainder(24).toString() + ' hours, ',
+                textStyle: TextStyle(color: Colors.white),
+              ),
+              RotateAnimatedText(
+                countdownDuration.inMinutes.remainder(60).toString() +
+                    ' minutes, ',
+                textStyle: TextStyle(color: Colors.white),
+              ),
+              RotateAnimatedText(
+                countdownDuration.inSeconds.remainder(60).toString() +
+                    ' seconds.',
+                textStyle: TextStyle(color: Colors.white),
+              ),
+            ],
+          ),
+        ],
       ),
     );
+
+    // @override
+    // Widget build(BuildContext context) {
+    //   return Container(
+    //     decoration: const BoxDecoration(
+    //       gradient: LinearGradient(
+    //           begin: Alignment.topCenter,
+    //           end: Alignment.bottomCenter,
+    //           colors: <Color>[Colors.orange, Colors.deepOrange]),
+    //     ),
+    //     child: Padding(
+    //       padding: const EdgeInsets.symmetric(horizontal: 16.0),
+    //       child: Align(
+    //         alignment: Alignment.centerLeft,
+    //         child: Text(
+    //           'The effigy burns in: ',
+    //           style: TextStyle(color: Colors.white),
+    //         ),
+    //         child: Text(
+    //           'The effigy burns in: ' +
+    //               '\n'+
+    //               countdownDuration.inDays.toString() +
+    //               ' days, ' +
+    //               countdownDuration.inHours.remainder(24).toString() +
+    //               ' hours, ' +
+    //               countdownDuration.inMinutes.remainder(60).toString() +
+    //               ' minutes, ' +
+    //               countdownDuration.inSeconds.remainder(60).toString() +
+    //               ' seconds.',
+    //           style: TextStyle(color: Colors.white),
+    //         ),
+    //       ),
+    //     ),
+    //   );
   }
 
   @override
