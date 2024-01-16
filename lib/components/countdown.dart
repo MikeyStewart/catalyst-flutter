@@ -42,39 +42,41 @@ class _CountDownState extends State<CountDown> {
             end: Alignment.bottomCenter,
             colors: <Color>[Colors.orange, Colors.deepOrange]),
       ),
-      child: Row(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Text(
-              'The effigy burns in: ',
-              style: TextStyle(color: Colors.white),
+      child: SafeArea(
+        child: Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Text(
+                'The effigy burns in: ',
+                style: TextStyle(color: Colors.white),
+              ),
             ),
-          ),
-          AnimatedTextKit(
-            repeatForever: true,
-            animatedTexts: [
-              RotateAnimatedText(
-                countdownDuration.inDays.toString() + ' days, ',
-                textStyle: TextStyle(color: Colors.white),
-              ),
-              RotateAnimatedText(
-                countdownDuration.inHours.remainder(24).toString() + ' hours, ',
-                textStyle: TextStyle(color: Colors.white),
-              ),
-              RotateAnimatedText(
-                countdownDuration.inMinutes.remainder(60).toString() +
-                    ' minutes, ',
-                textStyle: TextStyle(color: Colors.white),
-              ),
-              RotateAnimatedText(
-                countdownDuration.inSeconds.remainder(60).toString() +
-                    ' seconds.',
-                textStyle: TextStyle(color: Colors.white),
-              ),
-            ],
-          ),
-        ],
+            AnimatedTextKit(
+              repeatForever: true,
+              animatedTexts: [
+                RotateAnimatedText(
+                  countdownDuration.inDays.toString() + ' days, ',
+                  textStyle: TextStyle(color: Colors.white),
+                ),
+                RotateAnimatedText(
+                  countdownDuration.inHours.remainder(24).toString() + ' hours, ',
+                  textStyle: TextStyle(color: Colors.white),
+                ),
+                RotateAnimatedText(
+                  countdownDuration.inMinutes.remainder(60).toString() +
+                      ' minutes, ',
+                  textStyle: TextStyle(color: Colors.white),
+                ),
+                RotateAnimatedText(
+                  countdownDuration.inSeconds.remainder(60).toString() +
+                      ' seconds.',
+                  textStyle: TextStyle(color: Colors.white),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
 
