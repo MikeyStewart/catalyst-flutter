@@ -5,8 +5,16 @@ class EventRepository {
     await DBHelper.insertEvent(event);
   }
 
+  Future<void> addCamp(Map<String, dynamic> camp) async {
+    await DBHelper.insertCamp(camp);
+  }
+
   Future<List<Map<String, dynamic>>> getAllEvents() async {
     return await DBHelper.getAllEvents();
+  }
+
+  Future<List<Map<String, dynamic>>> getAllCamps() async {
+    return await DBHelper.getAllCamps();
   }
 
   Future<List<String>> getAllDates() async {

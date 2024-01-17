@@ -35,6 +35,14 @@ class DBHelper {
             saved INTEGER  -- Integer used to represent a boolean (0 for false, 1 for true)
           )
         ''');
+
+        await db.execute('''
+          CREATE TABLE camps (
+            id TEXT PRIMARY KEY,
+            name TEXT,
+            description TEXT
+          )
+        ''');
       },
     );
   }
@@ -44,11 +52,24 @@ class DBHelper {
     await db.insert('events', event);
   }
 
+  static Future<void> insertCamp(Map<String, dynamic> camp) async {
+    final db = await database;
+    await db.insert('camps', camp);
+  }
+
   static Future<List<Map<String, dynamic>>> getAllEvents() async {
     final db = await database;
     return await db.query(
         'events',
       orderBy: 'startTime'
+    );
+  }
+
+  static Future<List<Map<String, dynamic>>> getAllCamps() async {
+    final db = await database;
+    return await db.query(
+        'camps',
+        orderBy: 'name'
     );
   }
 

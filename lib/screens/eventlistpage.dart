@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:catalyst_flutter/components/countdown.dart';
 import 'package:catalyst_flutter/components/eventcard.dart';
-import 'package:catalyst_flutter/components/map.dart';
+import 'package:catalyst_flutter/components/mapPage.dart';
 import 'package:catalyst_flutter/data/EventProvider.dart';
 import 'package:catalyst_flutter/data/category.dart';
 import 'package:catalyst_flutter/data/event.dart';
@@ -19,6 +19,7 @@ class EventListPage extends StatefulWidget {
 
 class _EventListPageState extends State<EventListPage> {
   Set<String> selectedMainFilters = <String>{'All events'};
+  Set<String> selectedCampFilters = <String>{};
   Set<Category> selectedCategoryFilters = <Category>{};
 
   @override
@@ -70,10 +71,16 @@ class _EventListPageState extends State<EventListPage> {
                             BorderRadius.vertical(top: Radius.circular(16))),
                     builder: (context) => FilterSheet(
                           selectedMainFilters: selectedMainFilters,
+                          selectedCampFilters: selectedCampFilters,
                           selectedCategoryFilters: selectedCategoryFilters,
                           updateMainFilters: (mainFilters) {
                             setState(() {
                               selectedMainFilters = mainFilters;
+                            });
+                          },
+                          updateCampFilters: (campFilters) {
+                            setState(() {
+                              selectedCampFilters = selectedCampFilters;
                             });
                           },
                           updateCategoryFilters: (categoryFilters) {
@@ -85,7 +92,8 @@ class _EventListPageState extends State<EventListPage> {
               },
               label: Text('Filter (' +
                   (events
-                          .filter(selectedMainFilters, selectedCategoryFilters)
+                          .filter(selectedMainFilters, selectedCampFilters,
+                              selectedCategoryFilters)
                           .length)
                       .toString() +
                   ')'),
@@ -99,22 +107,25 @@ class _EventListPageState extends State<EventListPage> {
                 (events
                         .where((event) => event.date == date)
                         .toList()
-                        .filter(selectedMainFilters, selectedCategoryFilters)
+                        .filter(selectedMainFilters, selectedCampFilters,
+                            selectedCategoryFilters)
                         .isEmpty)
                     ? EmptyView()
                     : ListView.builder(
                         itemCount: events
                             .where((event) => event.date == date)
                             .toList()
-                            .filter(
-                                selectedMainFilters, selectedCategoryFilters)
+                            .filter(selectedMainFilters, selectedCampFilters,
+                                selectedCategoryFilters)
                             .length,
                         itemBuilder: (context, index) {
                           return EventCard(
                               event: events
                                   .where((event) => event.date == date)
                                   .toList()
-                                  .filter(selectedMainFilters,
+                                  .filter(
+                                      selectedMainFilters,
+                                      selectedCampFilters,
                                       selectedCategoryFilters)[index]);
                         },
                       ),
@@ -169,7 +180,9 @@ class FilterInfo {
 class FilterSheet extends StatefulWidget {
   final Set<String> selectedMainFilters;
   final Set<Category> selectedCategoryFilters;
+  final Set<String> selectedCampFilters;
   final Function(Set<String>) updateMainFilters;
+  final Function(Set<String>) updateCampFilters;
   final Function(Set<Category>) updateCategoryFilters;
 
   FilterSheet({
@@ -177,6 +190,8 @@ class FilterSheet extends StatefulWidget {
     required this.selectedCategoryFilters,
     required this.updateMainFilters,
     required this.updateCategoryFilters,
+    required this.selectedCampFilters,
+    required this.updateCampFilters,
   });
 
   @override
@@ -186,6 +201,7 @@ class FilterSheet extends StatefulWidget {
 class _FilterSheetState extends State<FilterSheet> {
   late Set<String> selectedMainFilters;
   late Set<Category> selectedCategoryFilters;
+  late Set<String> selectedCampFilters;
 
   Set<String> mainFilters = <String>{'All events', 'Saved'};
 
@@ -195,10 +211,15 @@ class _FilterSheetState extends State<FilterSheet> {
 
     selectedMainFilters = widget.selectedMainFilters;
     selectedCategoryFilters = widget.selectedCategoryFilters;
+    selectedCampFilters = widget.selectedCampFilters;
   }
 
   @override
   Widget build(BuildContext context) {
+    final eventProvider = context.read<EventDataProvider>();
+    Map<String, List<String>> campFilters =
+        groupByStartingLetter(eventProvider.camps.map((e) => e.name).toList());
+
     return DraggableScrollableSheet(
       initialChildSize: 0.5,
       minChildSize: 0.5,
@@ -253,13 +274,15 @@ class _FilterSheetState extends State<FilterSheet> {
                         selectedMainFilters
                             .removeWhere((filter) => filter != 'All events');
                         selectedCategoryFilters.clear();
+                        selectedCampFilters.clear();
                       } else {
                         selectedMainFilters.remove('All events');
                       }
                     } else {
                       if (filter != 'All events') {
                         selectedMainFilters.remove(filter);
-                        if (selectedCategoryFilters.isEmpty &&
+                        if (selectedCampFilters.isEmpty &&
+                            selectedCategoryFilters.isEmpty &&
                             selectedMainFilters.isEmpty) {
                           selectedMainFilters.add('All events');
                         }
@@ -267,6 +290,7 @@ class _FilterSheetState extends State<FilterSheet> {
                     }
                     setState(() {
                       widget.updateMainFilters(selectedMainFilters);
+                      widget.updateCampFilters(selectedCampFilters);
                       widget.updateCategoryFilters(selectedCategoryFilters);
                     });
                   },
@@ -285,7 +309,8 @@ class _FilterSheetState extends State<FilterSheet> {
             spacing: 8.0, // gap between adjacent chips
             runSpacing: 4.0, // gap between lines
             children: <Widget>[
-              for (Category category in Category.values)
+              for (Category category
+                  in Category.values.where((e) => e != Category.unknown))
                 FilterChip(
                   label: IntrinsicWidth(
                     child: Row(
@@ -293,7 +318,9 @@ class _FilterSheetState extends State<FilterSheet> {
                       children: [
                         Icon(category.icon),
                         SizedBox(width: 4.0),
-                        Expanded(child: Text(category.displayName, overflow: TextOverflow.ellipsis)),
+                        Expanded(
+                            child: Text(category.displayName,
+                                overflow: TextOverflow.ellipsis)),
                       ],
                     ),
                   ),
@@ -307,6 +334,7 @@ class _FilterSheetState extends State<FilterSheet> {
                     } else {
                       selectedCategoryFilters.remove(category);
                       if (selectedCategoryFilters.isEmpty &&
+                          selectedCampFilters.isEmpty &&
                           selectedMainFilters.isEmpty) {
                         selectedMainFilters.add('All events');
                       }
@@ -324,8 +352,124 @@ class _FilterSheetState extends State<FilterSheet> {
             thickness: 1.0,
             height: 1.0,
           ),
+          SizedBox(height: 16.0),
+          Text('Theme Camps'),
+          SizedBox(height: 16.0),
+          for (MapEntry<String, List<String>> letterGroup
+              in campFilters.entries)
+            CampsByLetter(
+                camps: letterGroup,
+                selectedCamps: selectedCampFilters,
+                onSelected: (bool selected, String campName) {
+                  if (selected) {
+                    selectedCampFilters.add(campName);
+                    selectedMainFilters.remove('All events');
+                  } else {
+                    selectedCampFilters.remove(campName);
+                    if (selectedCategoryFilters.isEmpty &&
+                        selectedCampFilters.isEmpty &&
+                        selectedMainFilters.isEmpty) {
+                      selectedMainFilters.add('All events');
+                    }
+                  }
+                  setState(() {
+                    widget.updateMainFilters(selectedMainFilters);
+                    widget.updateCampFilters(selectedCampFilters);
+                  });
+                }),
+          SizedBox(height: 16.0),
+          Divider(
+            thickness: 1.0,
+            height: 1.0,
+          ),
         ],
       ),
+    );
+  }
+}
+
+Map<String, List<String>> groupByStartingLetter(List<String> words) {
+  // Create a map to store the grouped words
+  Map<String, List<String>> groupedWords = {};
+
+  // Iterate through each word
+  for (String word in words) {
+    // Get the starting letter of the word
+    String startingLetter = word[0].toLowerCase();
+
+    // Check if the starting letter is already a key in the map
+    if (!groupedWords.containsKey(startingLetter)) {
+      // If not, create a new entry with an empty list
+      groupedWords[startingLetter] = [];
+    }
+
+    // Add the word to the list corresponding to its starting letter
+    groupedWords[startingLetter]!.add(word);
+  }
+
+  return groupedWords;
+}
+
+class CampsByLetter extends StatelessWidget {
+  final MapEntry<String, List<String>> camps;
+  final Set<String> selectedCamps;
+  final Function(bool, String) onSelected;
+
+  const CampsByLetter(
+      {super.key,
+      required this.camps,
+      required this.onSelected,
+      required this.selectedCamps});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(top: 14.0),
+          child: Text(
+            camps.key.toUpperCase(),
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+        ),
+        SizedBox(
+          width: 12.0,
+        ),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Wrap(
+                spacing: 8.0, // gap between adjacent chips
+                runSpacing: 0.0, // gap between lines
+                children: <Widget>[
+                  for (String campName in camps.value)
+                    FilterChip(
+                      label: Text(campName, overflow: TextOverflow.ellipsis),
+                      clipBehavior: Clip.hardEdge,
+                      showCheckmark: true,
+                      selected: selectedCamps.contains(campName),
+                      onSelected: (bool selected) {
+                        if (selected) {
+                          selectedCamps.add(campName);
+                        } else {
+                          selectedCamps.remove(campName);
+                        }
+                        onSelected(selected, campName);
+                      },
+                    )
+                ],
+              ),
+              SizedBox(
+                height: 16.0,
+              )
+            ],
+          ),
+        ),
+      ],
     );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:catalyst_flutter/data/category.dart';
+import 'package:catalyst_flutter/data/themecamp.dart';
 import 'package:intl/intl.dart';
 
 class Event {
@@ -35,9 +36,7 @@ class Event {
           .map((e) => getCategoryFromName(e))
           .toList(),
       date: DateTime.parse(map['date']),
-      adultWarnings: (map['adultWarnings'] as String)
-          .split(',')
-          .toList(),
+      adultWarnings: (map['adultWarnings'] as String).split(',').toList(),
       startTime:
           map['startTime'] != null ? DateTime.parse(map['startTime']) : null,
       endTime: map['endTime'] != null ? DateTime.parse(map['endTime']) : null,
@@ -118,14 +117,20 @@ extension EventExtension on Event {
 }
 
 extension EventListExtension<T> on List<Event> {
-  List<Event> filter(
-      Set<String> selectedMainFilters, Set<Category> selectedCategoryFilters) {
+  List<Event> filter(Set<String> selectedMainFilters,
+      Set<String> selectedCampFilters, Set<Category> selectedCategoryFilters) {
+
+    print(selectedCampFilters);
+
     return this
         .where((event) =>
             selectedMainFilters.contains('Saved') ? event.saved : true)
         .where((event) => selectedCategoryFilters.isNotEmpty
             ? event.categories
                 .any((category) => selectedCategoryFilters.contains(category))
+            : true)
+        .where((event) => selectedCampFilters.isNotEmpty
+            ? selectedCampFilters.contains(event.location)
             : true)
         .toList();
   }

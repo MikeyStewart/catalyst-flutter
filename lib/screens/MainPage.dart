@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:catalyst_flutter/data/themecamp.dart';
 import 'package:catalyst_flutter/screens/eventlistpage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -23,40 +24,49 @@ class MainPage extends StatelessWidget {
     await eventProvider.loadDataFromDatabase();
 
     // Only save events to DB if there are none already
-    if (eventProvider.events.isNotEmpty) return;
-
-    // Parse CSV file and initialize your data
-    final eventsJson = await rootBundle.loadString('assets/events24.json');
-    final List<dynamic> eventListJson = jsonDecode(eventsJson);
-
-    eventListJson.forEach((json) {
-      (json['Dates'] as String)
-          .split(',')
-          .where((element) => element.isNotEmpty)
-          .map(
-              (unparsedDate) => DateFormat('EEEE d MMMM y').parse(unparsedDate))
-          .forEach((date) {
-        _eventService.addEvent(Event(
-            id: Uuid().v4(),
-            name: json['Event Name'],
-            description: json['Description'],
-            categories: (json['Event Types'] as String)
-                .split(',')
-                .where((element) => element.isNotEmpty)
-                .map((element) => getCategoryFromName(element))
-                .toList(),
-            date: date,
-            adultWarnings: (json['Adults Only - Warnings'] as String)
-                .split(',')
-                .where((element) => element.isNotEmpty)
-                .toList(),
-            startTime: _parseTime(json['Start Time']),
-            endTime: _parseTime(json['End Time']),
-            location: _getLocation(json['Location - Theme Camp'],
-                json['Location - Artwork'], json['Location - Other']),
-            saved: false)); // No event will be saved initially
+    if (eventProvider.events.isEmpty) {
+      final eventsJson = await rootBundle.loadString('assets/events24.json');
+      final List<dynamic> eventListJson = jsonDecode(eventsJson);
+      eventListJson.forEach((json) {
+        (json['Dates'] as String)
+            .split(',')
+            .where((element) => element.isNotEmpty)
+            .map((unparsedDate) =>
+                DateFormat('EEEE d MMMM y').parse(unparsedDate))
+            .forEach((date) {
+          _eventService.addEvent(Event(
+              id: Uuid().v4(),
+              name: json['Event Name'],
+              description: json['Description'],
+              categories: (json['Event Types'] as String)
+                  .split(',')
+                  .where((element) => element.isNotEmpty)
+                  .map((element) => getCategoryFromName(element))
+                  .toList(),
+              date: date,
+              adultWarnings: (json['Adults Only - Warnings'] as String)
+                  .split(',')
+                  .where((element) => element.isNotEmpty)
+                  .toList(),
+              startTime: _parseTime(json['Start Time']),
+              endTime: _parseTime(json['End Time']),
+              location: _getLocation(json['Location - Theme Camp'],
+                  json['Location - Artwork'], json['Location - Other']),
+              saved: false)); // No event will be saved initially
+        });
       });
-    });
+    }
+
+    if (eventProvider.camps.isEmpty) {
+      final campsJson = await rootBundle.loadString('assets/fake_camps.json');
+      final List<dynamic> campListJson = jsonDecode(campsJson);
+      campListJson.forEach((json) {
+        _eventService.addCamp(ThemeCamp(
+            id: Uuid().v4(),
+            name: json['name'],
+            description: json['description']));
+      });
+    }
 
     eventProvider.loadDataFromDatabase();
 
@@ -173,7 +183,7 @@ DateTime? _parseTime(String unparsedTime) {
 
 String _getLocation(String themeCamp, String artwork, String elsewhere) {
   if (themeCamp.isNotEmpty) {
-    return themeCamp.substring(0, themeCamp.length - 6);
+    return themeCamp.substring(0, themeCamp.length - 6).trim();
   } else if (artwork.isNotEmpty) {
     return artwork;
   } else if (elsewhere.isNotEmpty) {

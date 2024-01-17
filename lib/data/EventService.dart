@@ -1,4 +1,5 @@
 import 'package:catalyst_flutter/data/event.dart';
+import 'package:catalyst_flutter/data/themecamp.dart';
 
 import 'EventRepository.dart';
 
@@ -7,6 +8,10 @@ class EventService {
 
   Future<void> addEvent(Event event) async {
     await _repository.addEvent(event.toMap());
+  }
+
+  Future<void> addCamp(ThemeCamp camp) async {
+    await _repository.addCamp(camp.toJson());
   }
 
   Future<List<Event>> getAllEvents() async {
@@ -21,6 +26,13 @@ class EventService {
     final List<DateTime> dates =
         dateList.map((date) => DateTime.parse(date)).toList();
     return dates;
+  }
+
+  Future<List<ThemeCamp>> getAllCamps() async {
+    final List<dynamic> campListJson = await _repository.getAllCamps();
+    final List<ThemeCamp> camps =
+    campListJson.map((json) => ThemeCamp.fromJson(json)).toList();
+    return camps;
   }
 
   Future<Event> saveEvent(Event event) async {

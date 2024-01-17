@@ -2,7 +2,7 @@ import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui';
 
-class Map extends StatelessWidget {
+class MapPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
