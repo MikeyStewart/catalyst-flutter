@@ -119,12 +119,14 @@ extension EventExtension on Event {
 extension EventListExtension<T> on List<Event> {
   List<Event> filter(Set<String> selectedMainFilters,
       Set<String> selectedCampFilters, Set<Category> selectedCategoryFilters) {
-
     print(selectedCampFilters);
 
     return this
         .where((event) =>
             selectedMainFilters.contains('Saved') ? event.saved : true)
+        .where((event) => selectedMainFilters.contains('Roaming')
+            ? event.location.contains('Roaming')
+            : true)
         .where((event) => selectedCategoryFilters.isNotEmpty
             ? event.categories
                 .any((category) => selectedCategoryFilters.contains(category))

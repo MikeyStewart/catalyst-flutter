@@ -18,7 +18,7 @@ class MapPage extends StatelessWidget {
             ),
           ),
           OpenContainer(
-            closedElevation: 0.0,
+              closedElevation: 0.0,
               tappable: false,
               closedShape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(32.0)),
@@ -88,7 +88,7 @@ class ExpandedMap extends StatelessWidget {
           minScale: 1,
           maxScale: 5,
           child: Image(
-            image: AssetImage('assets/KB-Map-23.jpg'),
+            image: AssetImage('assets/Kiwiburn-2024-Town-Map.png'),
             width: double.infinity,
             height: double.infinity,
           ),
@@ -100,10 +100,13 @@ class ExpandedMap extends StatelessWidget {
           right: 0,
           child: Center(
             child: FloatingActionButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: Icon(Icons.close)),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Icon(Icons.close),
+              backgroundColor: Theme.of(context).colorScheme.primary,
+              foregroundColor: Theme.of(context).colorScheme.onPrimary,
+            ),
           ))
     ]);
   }

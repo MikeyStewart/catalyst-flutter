@@ -58,12 +58,12 @@ class MainPage extends StatelessWidget {
     }
 
     if (eventProvider.camps.isEmpty) {
-      final campsJson = await rootBundle.loadString('assets/fake_camps.json');
+      final campsJson = await rootBundle.loadString('assets/2024_camps.json');
       final List<dynamic> campListJson = jsonDecode(campsJson);
       campListJson.forEach((json) {
         _eventService.addCamp(ThemeCamp(
             id: Uuid().v4(),
-            name: json['name'],
+            name: json['name'].toString().trim(),
             description: json['description']));
       });
     }
@@ -185,9 +185,9 @@ String _getLocation(String themeCamp, String artwork, String elsewhere) {
   if (themeCamp.isNotEmpty) {
     return themeCamp.substring(0, themeCamp.length - 6).trim();
   } else if (artwork.isNotEmpty) {
-    return artwork;
+    return artwork.trim();
   } else if (elsewhere.isNotEmpty) {
-    return elsewhere;
+    return elsewhere.trim();
   } else {
     return 'unknown';
   }

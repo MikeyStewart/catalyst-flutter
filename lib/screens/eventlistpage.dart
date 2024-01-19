@@ -35,6 +35,10 @@ class _EventListPageState extends State<EventListPage> {
           child: Scaffold(
             appBar: AppBar(
               centerTitle: true,
+              leading: Padding(
+                padding: const EdgeInsets.only(top: 2.0, left: 16.0),
+                child: Image.asset('assets/catalyst_logo.png'),
+              ),
               title: Text('Event Guide'),
               bottom: TabBar(isScrollable: true, tabs: <Widget>[
                 for (DateTime date in eventProvider.dates)
@@ -203,7 +207,7 @@ class _FilterSheetState extends State<FilterSheet> {
   late Set<Category> selectedCategoryFilters;
   late Set<String> selectedCampFilters;
 
-  Set<String> mainFilters = <String>{'All events', 'Saved'};
+  Set<String> mainFilters = <String>{'All events', 'Saved', 'Roaming'};
 
   @override
   void initState() {
@@ -264,7 +268,13 @@ class _FilterSheetState extends State<FilterSheet> {
                             Text(filter),
                           ],
                         )
-                      : Text(filter, overflow: TextOverflow.ellipsis),
+                      : Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            SizedBox(height: 24.0),
+                            Text(filter, overflow: TextOverflow.ellipsis),
+                          ],
+                        ),
                   showCheckmark: true,
                   selected: selectedMainFilters.contains(filter),
                   onSelected: (bool selected) {

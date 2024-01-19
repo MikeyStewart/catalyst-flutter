@@ -6,7 +6,7 @@ import 'dart:convert';
 import 'package:animations/animations.dart';
 
 Future<String> loadThemeCamps() async {
-  return await rootBundle.loadString('assets/fake_camps.json');
+  return await rootBundle.loadString('assets/2024_camps.json');
 }
 
 class ThemeCamps extends StatelessWidget {
