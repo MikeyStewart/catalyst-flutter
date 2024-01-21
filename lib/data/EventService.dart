@@ -46,6 +46,7 @@ class EventService {
         startTime: event.startTime,
         endTime: event.endTime,
         location: event.location,
+        kidFriendly: event.kidFriendly,
         saved: true);
     await _repository.updateEvent(updatedEvent.toMap());
     return updatedEvent;
@@ -62,6 +63,7 @@ class EventService {
         startTime: event.startTime,
         endTime: event.endTime,
         location: event.location,
+        kidFriendly: event.kidFriendly,
         saved: false);
     await _repository.updateEvent(updatedEvent.toMap());
     return updatedEvent;

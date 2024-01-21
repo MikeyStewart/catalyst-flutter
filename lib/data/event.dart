@@ -13,6 +13,7 @@ class Event {
   final DateTime? endTime;
   final String location;
   final bool saved;
+  final bool kidFriendly;
 
   Event(
       {required this.id,
@@ -24,7 +25,8 @@ class Event {
       required this.startTime,
       required this.endTime,
       required this.location,
-      required this.saved});
+      required this.saved,
+      required this.kidFriendly});
 
   factory Event.fromMap(Map<String, dynamic> map) {
     return Event(
@@ -42,6 +44,7 @@ class Event {
       endTime: map['endTime'] != null ? DateTime.parse(map['endTime']) : null,
       location: map['location'],
       saved: map['saved'] == 1,
+      kidFriendly: map['kidFriendly'] == 1,
     );
   }
 
@@ -58,6 +61,7 @@ class Event {
       'endTime': endTime?.toIso8601String(),
       'location': location,
       'saved': saved ? 1 : 0,
+      'kidFriendly': kidFriendly ? 1 : 0,
     };
   }
 }
@@ -126,6 +130,9 @@ extension EventListExtension<T> on List<Event> {
             selectedMainFilters.contains('Saved') ? event.saved : true)
         .where((event) => selectedMainFilters.contains('Roaming')
             ? event.location.contains('Roaming')
+            : true)
+        .where((event) => selectedMainFilters.contains('Kids friendly')
+            ? event.kidFriendly
             : true)
         .where((event) => selectedCategoryFilters.isNotEmpty
             ? event.categories

@@ -35,84 +35,56 @@ class _CountDownState extends State<CountDown> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: <Color>[Colors.orange, Colors.deepOrange]),
-      ),
-      child: SafeArea(
-        child: Row(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Text(
-                'The effigy burns in: ',
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
-            AnimatedTextKit(
-              repeatForever: true,
-              animatedTexts: [
-                RotateAnimatedText(
-                  countdownDuration.inDays.toString() + ' days, ',
-                  textStyle: TextStyle(color: Colors.white),
-                ),
-                RotateAnimatedText(
-                  countdownDuration.inHours.remainder(24).toString() + ' hours, ',
-                  textStyle: TextStyle(color: Colors.white),
-                ),
-                RotateAnimatedText(
-                  countdownDuration.inMinutes.remainder(60).toString() +
-                      ' minutes, ',
-                  textStyle: TextStyle(color: Colors.white),
-                ),
-                RotateAnimatedText(
-                  countdownDuration.inSeconds.remainder(60).toString() +
-                      ' seconds.',
-                  textStyle: TextStyle(color: Colors.white),
-                ),
-              ],
-            ),
-          ],
+    if (DateTime(2024, 1, 28, 20, 59, 59).isBefore(DateTime.now())) {
+      return Container(
+        child: SizedBox(height: 0.0,),
+      );
+    } else {
+      return Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: <Color>[Colors.orange, Colors.deepOrange]),
         ),
-      ),
-    );
-
-    // @override
-    // Widget build(BuildContext context) {
-    //   return Container(
-    //     decoration: const BoxDecoration(
-    //       gradient: LinearGradient(
-    //           begin: Alignment.topCenter,
-    //           end: Alignment.bottomCenter,
-    //           colors: <Color>[Colors.orange, Colors.deepOrange]),
-    //     ),
-    //     child: Padding(
-    //       padding: const EdgeInsets.symmetric(horizontal: 16.0),
-    //       child: Align(
-    //         alignment: Alignment.centerLeft,
-    //         child: Text(
-    //           'The effigy burns in: ',
-    //           style: TextStyle(color: Colors.white),
-    //         ),
-    //         child: Text(
-    //           'The effigy burns in: ' +
-    //               '\n'+
-    //               countdownDuration.inDays.toString() +
-    //               ' days, ' +
-    //               countdownDuration.inHours.remainder(24).toString() +
-    //               ' hours, ' +
-    //               countdownDuration.inMinutes.remainder(60).toString() +
-    //               ' minutes, ' +
-    //               countdownDuration.inSeconds.remainder(60).toString() +
-    //               ' seconds.',
-    //           style: TextStyle(color: Colors.white),
-    //         ),
-    //       ),
-    //     ),
-    //   );
+        child: SafeArea(
+          child: Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Text(
+                  'The effigy burns in: ',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+              AnimatedTextKit(
+                repeatForever: true,
+                animatedTexts: [
+                  RotateAnimatedText(
+                    countdownDuration.inDays.toString() + ' days, ',
+                    textStyle: TextStyle(color: Colors.white),
+                  ),
+                  RotateAnimatedText(
+                    countdownDuration.inHours.remainder(24).toString() + ' hours, ',
+                    textStyle: TextStyle(color: Colors.white),
+                  ),
+                  RotateAnimatedText(
+                    countdownDuration.inMinutes.remainder(60).toString() +
+                        ' minutes, ',
+                    textStyle: TextStyle(color: Colors.white),
+                  ),
+                  RotateAnimatedText(
+                    countdownDuration.inSeconds.remainder(60).toString() +
+                        ' seconds.',
+                    textStyle: TextStyle(color: Colors.white),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      );
+    }
   }
 
   @override

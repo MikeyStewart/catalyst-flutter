@@ -207,7 +207,12 @@ class _FilterSheetState extends State<FilterSheet> {
   late Set<Category> selectedCategoryFilters;
   late Set<String> selectedCampFilters;
 
-  Set<String> mainFilters = <String>{'All events', 'Saved', 'Roaming'};
+  Set<String> mainFilters = <String>{
+    'All events',
+    'Saved',
+    'Roaming',
+    'Kids friendly'
+  };
 
   @override
   void initState() {

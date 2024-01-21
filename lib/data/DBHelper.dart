@@ -32,6 +32,7 @@ class DBHelper {
             startTime TEXT,
             endTime TEXT,
             location TEXT,
+            kidFriendly INTEGER,
             saved INTEGER  -- Integer used to represent a boolean (0 for false, 1 for true)
           )
         ''');

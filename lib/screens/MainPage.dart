@@ -52,6 +52,7 @@ class MainPage extends StatelessWidget {
               endTime: _parseTime(json['End Time']),
               location: _getLocation(json['Location - Theme Camp'],
                   json['Location - Artwork'], json['Location - Other']),
+              kidFriendly: json['Kids Friendly'] == 'Yes',
               saved: false)); // No event will be saved initially
         });
       });
